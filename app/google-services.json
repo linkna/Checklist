@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "650265853905",
+    "firebase_url": "https://leave-the-house.firebaseio.com",
+    "project_id": "leave-the-house",
+    "storage_bucket": "leave-the-house.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:650265853905:android:785816287fcbec0bfd2af0",
+        "android_client_info": {
+          "package_name": "dhbw.studienarbeit.leavethehouse_checklist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "650265853905-kscoiq9pl1n9mj7bjh076imlqkouqbq6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqvKrfoVtl9KIV3NXKdzXnLgaASMClKQU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "650265853905-kscoiq9pl1n9mj7bjh076imlqkouqbq6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
