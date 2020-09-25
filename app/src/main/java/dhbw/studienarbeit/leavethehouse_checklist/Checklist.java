@@ -5,17 +5,49 @@ import java.util.List;
 class Checklist {
     private String id;
     private String title;
-    private String uid;
-    private List<String> tasks;
+    private String userid;
+    private Object tasks;
 
     public Checklist(){}
 
-    public Checklist(String id, String title, String uid, List<String> tasks) {
+    public Checklist(String id, String title, String userid, Object tasks) {
         this.id = id;
         this.title = title;
-        this.uid = uid;
+        this.userid = userid;
         this.tasks = tasks;
     }
+
+    public static class ChecklistBuilder{
+        private String id;
+        private String title;
+        private String userid;
+        private Object tasks;
+
+        public ChecklistBuilder setId(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public ChecklistBuilder setTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public ChecklistBuilder setUserid(String userid) {
+            this.userid = userid;
+            return this;
+        }
+
+        public ChecklistBuilder setTasks(Object tasks) {
+            this.tasks = tasks;
+            return this;
+        }
+
+        public Checklist build(){
+            return new Checklist(id, title, userid, tasks);
+        }
+    }
+
 
     public String getId() {
         return id;
@@ -33,19 +65,19 @@ class Checklist {
         this.title = title;
     }
 
-    public String getUid() {
-        return uid;
+    public String getUserid() {
+        return userid;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    public void setUserid(String userid) {
+        this.userid = userid;
     }
 
-    public List<String> getTasks() {
+    public Object getTasks() {
         return tasks;
     }
 
-    public void setTasks(List<String> tasks) {
+    public void setTasks(Object tasks) {
         this.tasks = tasks;
     }
 }
