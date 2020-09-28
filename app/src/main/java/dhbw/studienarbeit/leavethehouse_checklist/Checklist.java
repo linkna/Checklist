@@ -1,16 +1,17 @@
 package dhbw.studienarbeit.leavethehouse_checklist;
 
+import java.util.ArrayList;
 import java.util.List;
 
 class Checklist {
     private String id;
     private String title;
     private String userid;
-    private Object tasks;
+    private List<String> tasks;
 
     public Checklist(){}
 
-    public Checklist(String id, String title, String userid, Object tasks) {
+    public Checklist(String id, String title, String userid, List<String> tasks) {
         this.id = id;
         this.title = title;
         this.userid = userid;
@@ -21,7 +22,7 @@ class Checklist {
         private String id;
         private String title;
         private String userid;
-        private Object tasks;
+        private List<String> tasks;
 
         public ChecklistBuilder setId(String id) {
             this.id = id;
@@ -38,7 +39,7 @@ class Checklist {
             return this;
         }
 
-        public ChecklistBuilder setTasks(Object tasks) {
+        public ChecklistBuilder setTasks(List<String> tasks) {
             this.tasks = tasks;
             return this;
         }
@@ -73,11 +74,11 @@ class Checklist {
         this.userid = userid;
     }
 
-    public Object getTasks() {
+    public List<String> getTasks() {
         return tasks;
     }
 
-    public void setTasks(Object tasks) {
+    public void setTasks(List<String> tasks) {
         this.tasks = tasks;
     }
 }
