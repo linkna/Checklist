@@ -1,21 +1,14 @@
 package dhbw.studienarbeit.leavethehouse_checklist;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.List;
-
-public class ProfilActivity extends BaseActivity {
+public class ProfileActivity extends BaseActivity {
 
     private TextView firstName;
     private TextView lastName;
@@ -28,7 +21,7 @@ public class ProfilActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profil);
+        setContentView(R.layout.activity_profile);
 
         auth = FirebaseAuth.getInstance();
         mDatabase = FirebaseFirestore.getInstance();

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -36,7 +35,7 @@ public class BaseActivity extends AppCompatActivity {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }else if(title.equalsIgnoreCase(getString(R.string.profil))){
-            Intent intent = new Intent(this, ProfilActivity.class);
+            Intent intent = new Intent(this, ProfileActivity.class);
             startActivity(intent);
         }else if(title.equalsIgnoreCase(getString(R.string.listOverview))){
             Intent intent = new Intent(this, ChecklistOverviewActivity.class);
