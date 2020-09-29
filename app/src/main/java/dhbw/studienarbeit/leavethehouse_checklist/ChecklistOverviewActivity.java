@@ -59,6 +59,7 @@ public class ChecklistOverviewActivity extends BaseActivity {
     private TextView noListTextView;
     private List<Map<String, Object>> checklistMap;
     private Checklist selectedList;
+    private Repository repository;
 
 
     @Override
@@ -70,7 +71,7 @@ public class ChecklistOverviewActivity extends BaseActivity {
         mDatabase = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
-        Repository repository = Repository.getInstance();
+        repository = Repository.getInstance();
 
         overviewList = findViewById(R.id.overviewListView);
 
@@ -89,6 +90,8 @@ public class ChecklistOverviewActivity extends BaseActivity {
         setListItems(overviewList, sampleItems);
 
         uid = getUid();
+
+
         checklistFuture=getChecklistData(uid);
         updateList();
 
@@ -266,6 +269,8 @@ public class ChecklistOverviewActivity extends BaseActivity {
     private String getUid() {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (mAuth.getCurrentUser() != null) {
+            repository.setCurrentUser(currentUser);
+            repository.setUid(currentUser.getUid());
             return currentUser.getUid();
         }
         Log.d(TAG, "no user is logged in");

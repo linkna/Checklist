@@ -2,9 +2,9 @@
     <string name="app_name">Leave the House - Checklist</string>
     <string name="password">Passwort</string>
     <string name="forgotPassword">Passwort vergessen</string>
-    <string name="email">E-Mail</string>
-    <string name="firstname">Vorname</string>
-    <string name="lastname">Nachname</string>
+    <string name="email">E-Mail:</string>
+    <string name="firstname">Vorname:</string>
+    <string name="lastname">Nachname:</string>
     <string name="signUp">Noch kein Konto? \n Registrieren</string>
     <string name="minimum_password">Password too short, enter minimum 6 characters!</string>
     <string name="auth_failed">Authentication failed, check your email and password or sign up</string>

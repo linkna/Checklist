@@ -1,12 +1,14 @@
 package dhbw.studienarbeit.leavethehouse_checklist;
 
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.List;
 
 public class Repository {
     FirebaseUser currentUser;
     String uid;
+    DocumentSnapshot userDocumentSnapshot;
     Checklist selectedList;
     List<Checklist> allListsOfUser;
 
@@ -51,5 +53,13 @@ public class Repository {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    public DocumentSnapshot getUserDocumentSnapshot() {
+        return userDocumentSnapshot;
+    }
+
+    public void setUserDocumentSnapshot(DocumentSnapshot userDocumentSnapshot) {
+        this.userDocumentSnapshot = userDocumentSnapshot;
     }
 }

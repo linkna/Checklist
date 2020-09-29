@@ -16,28 +16,26 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
-
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_checklist, menu);
         return true;
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        String title= (String) item.getTitle();
-        if(title.equalsIgnoreCase(getString(R.string.logout))){
+        String title = (String) item.getTitle();
+        if (title.equalsIgnoreCase(getString(R.string.logout))) {
             mAuth.signOut();
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
-        }else if(title.equalsIgnoreCase(getString(R.string.profil))){
+        } else if (title.equalsIgnoreCase(getString(R.string.profil))) {
             Intent intent = new Intent(this, ProfileActivity.class);
             startActivity(intent);
-        }else if(title.equalsIgnoreCase(getString(R.string.listOverview))){
+        } else if (title.equalsIgnoreCase(getString(R.string.listOverview))) {
             Intent intent = new Intent(this, ChecklistOverviewActivity.class);
             startActivity(intent);
         }

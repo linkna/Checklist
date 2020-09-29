@@ -13,7 +13,6 @@
         <activity android:name=".BaseActivity" />
         <activity android:name=".TaskChecklistActivity" />
         <activity android:name=".ChecklistOverviewActivity" />
-        <activity android:name=".ChecklistActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".SuccessActivity" />
         <activity android:name=".LoginActivity">
