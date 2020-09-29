@@ -13,7 +13,8 @@
         android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/overviewTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/taskOverviewTextView"
+        android:choiceMode="multipleChoice"/>
 
     <TextView
         android:id="@+id/taskOverviewTextView"
@@ -45,7 +46,7 @@
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/overviewTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/taskOverviewTextView" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addTaskButton"

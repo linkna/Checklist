@@ -8,5 +8,10 @@
     <string name="signUp">Noch kein Konto? \n Registrieren</string>
     <string name="minimum_password">Password too short, enter minimum 6 characters!</string>
     <string name="auth_failed">Authentication failed, check your email and password or sign up</string>
-    <string name="overview">Meine Listen</string>
+    <string name="listOverview">Meine Listen</string>
+    <string name="profil">Profil</string>
+    <string name="logout">Logout</string>
+    <string name="deleteAccount">Account löschen</string>
+    <string name="changeEmail">E-Mail ändern</string>
+    <string name="changePassword">Passwort ändern</string>
 </resources>

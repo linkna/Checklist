@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -55,53 +56,71 @@ public class SignUpActivity extends AppCompatActivity {
                 String email = inputEmail.getText().toString();
                 final String password = inputPassword.getText().toString();
 
-                if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                if (validateInput(email, password)) {
 
-                if (TextUtils.isEmpty(password)) {
-                    Toast.makeText(getApplicationContext(), "Enter password!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                    userInput.put("firstname", inputFirstName.getText().toString());
+                    userInput.put("lastname", inputLastName.getText().toString());
 
-                if (password.length() < 6) {
-                    Toast.makeText(getApplicationContext(), "Password too short, enter minimum 6 characters!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                    mAuth.createUserWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
 
-                userInput.put("firstname", inputFirstName.getText().toString());
-                userInput.put("lastname", inputLastName.getText().toString());
+                                    Toast.makeText(SignUpActivity.this, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
 
-                mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                    // If sign in fails, display a message to the user. If sign in succeeds
+                                    // the auth state listener will be notified and logic to handle the
+                                    // signed in user can be handled in the listener.
+                                    if (!task.isSuccessful()) {
+                                        //Toast.makeText(SignUpActivity.this, "Registrierung fehlgeschlagen.", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SignUpActivity.this, "Registrierung fehlgeschlagen. " + task.getException(),
+                                                Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(SignUpActivity.this, "Registrierung erfolgreich.", Toast.LENGTH_SHORT).show();
+                                        startActivity(new Intent(SignUpActivity.this, ChecklistOverviewActivity.class));
 
-                                Toast.makeText(SignUpActivity.this, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
-
-                                // If sign in fails, display a message to the user. If sign in succeeds
-                                // the auth state listener will be notified and logic to handle the
-                                // signed in user can be handled in the listener.
-                                if (!task.isSuccessful()) {
-                                    Toast.makeText(SignUpActivity.this, "Registrierung fehlgeschlagen." , Toast.LENGTH_SHORT).show();
-                                    Toast.makeText(SignUpActivity.this, "Authentication failed." + task.getException(),
-                                            Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(SignUpActivity.this, "Registrierung erfolgreich." , Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(SignUpActivity.this, ChecklistOverviewActivity.class));
-
-                                    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                                    String uid = currentUser.getUid();
-                                    //save data to database. Table: User: document generated with current users uid.
-                                    mDatabase.collection("User").document(uid).set(userInput);
-                                    finish();
+                                        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                                        String uid = currentUser.getUid();
+                                        //save data to database. Table: User: document generated with current users uid.
+                                        mDatabase.collection("User").document(uid).set(userInput);
+                                        finish();
+                                    }
                                 }
-                            }
 
-                        });
+                            });
+                }
             }
         });
 
+    }
+
+    private boolean validateInput(String email, String password) {
+
+        boolean isInputValid = true;
+
+        if (TextUtils.isEmpty(email)) {
+            inputEmail.setError("Email-Adresse eingeben");
+            isInputValid = false;
+        }
+
+        if (TextUtils.isEmpty(password)) {
+            inputPassword.setError("Passwort eingeben");
+            isInputValid = false;
+        }
+
+        if (password.length() < 6) {
+            inputPassword.setError("Password zu kurz. Mindestlänge 6 Zeichen");
+            isInputValid = false;
+        }
+        if (!isEmailValid(inputEmail.getText().toString())) {
+            inputEmail.setError("Bitte gültiges Email-Adressen-Format eingeben");
+            isInputValid = false;
+        }
+
+        return isInputValid;
+    }
+
+    boolean isEmailValid(String email) {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 }

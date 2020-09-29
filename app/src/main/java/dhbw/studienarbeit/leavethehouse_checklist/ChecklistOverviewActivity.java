@@ -6,6 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -32,7 +35,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 
-public class ChecklistOverviewActivity extends AppCompatActivity {
+public class ChecklistOverviewActivity extends BaseActivity {
 
     public static final String CHECKLIST = "Checklist";
 
@@ -62,8 +65,12 @@ public class ChecklistOverviewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checklist_overview);
+
+
         mDatabase = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
+
+        Repository repository = Repository.getInstance();
 
         overviewList = findViewById(R.id.overviewListView);
 
@@ -86,6 +93,10 @@ public class ChecklistOverviewActivity extends AppCompatActivity {
         updateList();
 
 
+
+
+
+
         overviewList.setOnItemClickListener((parent, view, position, id) -> {
             //setChecklist(uid, "Testliste", sampleItems);
             //getUserChecklistIds();
@@ -102,6 +113,9 @@ public class ChecklistOverviewActivity extends AppCompatActivity {
                     selectedList.setTitle(String.valueOf(map.get("title")));
                     selectedList.setTasks((ArrayList<String>)map.get("tasks"));
                     selectedList.setUserid(String.valueOf(map.get("userid")));
+
+                    repository.setSelectedList(selectedList);
+
                     clickedId= String.valueOf(map.get("id"));
 
                     Log.d(TAG, String.valueOf(map.get("title")));
@@ -113,7 +127,6 @@ public class ChecklistOverviewActivity extends AppCompatActivity {
 //Todo: data store to share data between activities
 
             Intent intent = new Intent(ChecklistOverviewActivity.this, TaskChecklistActivity.class);
-            intent.putExtra("id", clickedId);
             startActivity(intent);
 
 
@@ -126,13 +139,9 @@ public class ChecklistOverviewActivity extends AppCompatActivity {
 
     }
 
-    public Checklist getSelectedList(){
-        return selectedList;
-    }
+
 
     private void updateList() {
-
-
         checklistFuture.onSuccessTask(checklists -> {
            checklists.forEach(checklist -> {
                sampleItems.add(checklist.getTitle());
