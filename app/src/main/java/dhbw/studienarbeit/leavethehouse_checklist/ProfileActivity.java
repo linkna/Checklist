@@ -1,7 +1,6 @@
 package dhbw.studienarbeit.leavethehouse_checklist;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -14,41 +13,33 @@ public class ProfileActivity extends BaseActivity {
 
     private TextView firstName;
     private TextView lastName;
-    private FirebaseAuth auth;
-    private TextView email;
     private FirebaseUser currentUser;
-    private String uid;
-    private FirebaseFirestore mDatabase;
     private Repository repository;
-    private Button changeEmailBtn;
-    private Button changePasswordBtn;
-    private Button deleteProfileBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        auth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseFirestore.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseFirestore mDatabase = FirebaseFirestore.getInstance();
 
         repository = Repository.getInstance();
 
 
         firstName = findViewById(R.id.firstNameTextView);
         lastName = findViewById(R.id.lastNameTextView);
-        email = findViewById(R.id.emailTextView);
+        TextView email = findViewById(R.id.emailTextView);
 
-        changeEmailBtn = findViewById(R.id.emailChangeButton);
-        changePasswordBtn = findViewById(R.id.passwordChangeButton);
-        deleteProfileBtn = findViewById(R.id.accountDeleteButton);
+        Button changeEmailBtn = findViewById(R.id.emailChangeButton);
+        Button changePasswordBtn = findViewById(R.id.passwordChangeButton);
+        Button deleteProfileBtn = findViewById(R.id.accountDeleteButton);
 
         changeEmailBtn.setTextColor(getColor(R.color.white));
         changePasswordBtn.setTextColor(getColor(R.color.white));
         deleteProfileBtn.setTextColor(getColor(R.color.white));
 
-        currentUser = auth.getCurrentUser();
-        uid = repository.getUid();
+        String uid = repository.getUid();
 
         email.setText(repository.getCurrentUser().getEmail());
 

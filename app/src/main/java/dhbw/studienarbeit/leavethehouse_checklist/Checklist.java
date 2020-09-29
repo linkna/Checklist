@@ -1,6 +1,6 @@
 package dhbw.studienarbeit.leavethehouse_checklist;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 class Checklist {

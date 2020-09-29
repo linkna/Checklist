@@ -1,18 +1,14 @@
 package dhbw.studienarbeit.leavethehouse_checklist;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -28,7 +24,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,8 +41,6 @@ public class ChecklistOverviewActivity extends BaseActivity {
     public ListView overviewList;
     public FloatingActionButton addListButton;
 
-    private ArrayAdapter<String> mAdapter;
-
 
     ArrayList<String> sampleItems;
     private List<String> checklistid;
@@ -55,7 +48,6 @@ public class ChecklistOverviewActivity extends BaseActivity {
 
 
     private static final String TAG = "MyActivity";
-    private Checklist checklist;
     private TextView noListTextView;
     private List<Map<String, Object>> checklistMap;
     private Checklist selectedList;
@@ -106,7 +98,6 @@ public class ChecklistOverviewActivity extends BaseActivity {
             //checklistFuture=getChecklistData(uid);
 
             String clickedTitle= sampleItems.get(position);
-            String clickedId = null;
 
             //Todo: überprüfen ob das funktioniert: Map = Arraylist size=5 aber leer
             for(Map map : checklistMap){
@@ -119,7 +110,6 @@ public class ChecklistOverviewActivity extends BaseActivity {
 
                     repository.setSelectedList(selectedList);
 
-                    clickedId= String.valueOf(map.get("id"));
 
                     Log.d(TAG, String.valueOf(map.get("title")));
                     Log.d(TAG, selectedList.getTitle());
@@ -127,11 +117,8 @@ public class ChecklistOverviewActivity extends BaseActivity {
                 }
             }
 
-//Todo: data store to share data between activities
-
             Intent intent = new Intent(ChecklistOverviewActivity.this, TaskChecklistActivity.class);
             startActivity(intent);
-
 
         });
 
@@ -161,7 +148,7 @@ public class ChecklistOverviewActivity extends BaseActivity {
 //           Log.d(TAG, "145: Titel in Map " +String.valueOf(checklistMap.get(1).get("title")));
 
             if (sampleItems.isEmpty()){
-                noListTextView.setText("Es wurden noch keine Listen angelegt.");
+                noListTextView.setText(getString(R.string.noLists));
             }
             setListItems(overviewList, sampleItems);
            return null;
@@ -171,7 +158,7 @@ public class ChecklistOverviewActivity extends BaseActivity {
 
 
     private void setListItems(ListView overviewList, List<String> titles) {
-        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, titles);
+        ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, titles);
         overviewList.setAdapter(mAdapter);
     }
 
@@ -198,12 +185,9 @@ public class ChecklistOverviewActivity extends BaseActivity {
             // write new checklist to database
             mDatabase.collection("Checklist")
                     .add(newChecklist)
-                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
-                            checklistid.add(documentReference.getId());
-                        }
+                    .addOnSuccessListener(documentReference -> {
+                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                        checklistid.add(documentReference.getId());
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override

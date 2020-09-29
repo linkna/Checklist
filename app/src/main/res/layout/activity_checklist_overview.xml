@@ -22,7 +22,7 @@
         android:layout_marginTop="19dp"
         android:gravity="center"
         android:text="@string/listOverview"
-        android:textSize="24dp"
+        android:textSize="24sp"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="184dp" />
 
@@ -33,7 +33,7 @@
         android:layout_marginTop="612dp"
         android:layout_marginBottom="87dp"
         android:gravity="center"
-        android:textSize="24dp"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
