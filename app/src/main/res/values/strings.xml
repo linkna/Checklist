@@ -15,4 +15,16 @@
     <string name="changeEmail">E-Mail ändern</string>
     <string name="changePassword">Passwort ändern</string>
     <string name="noLists">\"Es wurden noch keine Listen angelegt\"</string>
+    <string name="login">Login</string>
+    <string name="editList">Liste bearbeiten</string>
+    <string name="save">Speichern</string>
+    <string name="send">Protokoll Senden</string>
+    <string name="edit">Bearbeiten</string>
+    <string name="title">Titel</string>
+    <string name="deleteTasks">Ausgewählte Aufgaben entfernen</string>
+    <string name="newTask">neue Aufgabe hinzufügen</string>
+    <string name="saveTask">Aufgabe hinzufügen</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="accessDelete">Wirklich Löschen?</string>
+    <string name="delete">Löschen</string>
 </resources>

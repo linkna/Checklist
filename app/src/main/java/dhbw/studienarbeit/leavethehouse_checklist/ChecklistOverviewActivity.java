@@ -11,7 +11,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -42,7 +41,7 @@ public class ChecklistOverviewActivity extends BaseActivity {
     public FloatingActionButton addListButton;
 
 
-    ArrayList<String> sampleItems;
+    ArrayList<String> checklistTitleList;
     private List<String> checklistid;
     Task<List<Checklist>> checklistFuture;
 
@@ -73,13 +72,13 @@ public class ChecklistOverviewActivity extends BaseActivity {
 
         addListButton = findViewById(R.id.addListButton);
 
-        sampleItems = new ArrayList<>();
+        checklistTitleList = new ArrayList<>();
         checklistMap = new ArrayList<>();
         selectedList= new Checklist();
 //        sampleItems.add("item 1");
 //        sampleItems.add("item 2");
 
-        setListItems(overviewList, sampleItems);
+        setListItems(overviewList, checklistTitleList);
 
         uid = getUid();
 
@@ -97,7 +96,7 @@ public class ChecklistOverviewActivity extends BaseActivity {
             //getUserChecklistIds();
             //checklistFuture=getChecklistData(uid);
 
-            String clickedTitle= sampleItems.get(position);
+            String clickedTitle= checklistTitleList.get(position);
 
             //Todo: überprüfen ob das funktioniert: Map = Arraylist size=5 aber leer
             for(Map map : checklistMap){
@@ -134,7 +133,7 @@ public class ChecklistOverviewActivity extends BaseActivity {
     private void updateList() {
         checklistFuture.onSuccessTask(checklists -> {
            checklists.forEach(checklist -> {
-               sampleItems.add(checklist.getTitle());
+               checklistTitleList.add(checklist.getTitle());
                Map<String, Object> tmpMap = new HashMap<>();
                tmpMap.put("id", checklist.getId());
                tmpMap.put("userid", checklist.getUserid());
@@ -147,10 +146,10 @@ public class ChecklistOverviewActivity extends BaseActivity {
 
 //           Log.d(TAG, "145: Titel in Map " +String.valueOf(checklistMap.get(1).get("title")));
 
-            if (sampleItems.isEmpty()){
+            if (checklistTitleList.isEmpty()){
                 noListTextView.setText(getString(R.string.noLists));
             }
-            setListItems(overviewList, sampleItems);
+            setListItems(overviewList, checklistTitleList);
            return null;
         });
 

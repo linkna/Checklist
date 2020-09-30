@@ -1,38 +1,40 @@
 package dhbw.studienarbeit.leavethehouse_checklist;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
-import java.util.Map;
-import java.util.Objects;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class TaskChecklistActivity extends BaseActivity {
 
-
-    private ListView taskList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_checklist);
 
-        taskList = findViewById(R.id.taskOverviewListView);
-
+        ListView taskList = findViewById(R.id.taskOverviewListView);
         Repository repository = Repository.getInstance();
-
-        //Bundle extras = getIntent().getExtras();
-
         Checklist selectedList=repository.getSelectedList();
 
-        ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, selectedList.getTasks());
+
+        getSupportActionBar().setTitle(selectedList.getTitle());
+
+        ArrayAdapter<String> mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, selectedList.getTasks());
         taskList.setAdapter(mAdapter);
 
         Log.d("Tasklist: ", selectedList.getTitle() + " Titel der Liste" );
 
+    }
+
+    public void editListLabelClick(View view) {
+        Intent intent = new Intent(TaskChecklistActivity.this, EditListActivity.class);
+        startActivity(intent);
     }
 }

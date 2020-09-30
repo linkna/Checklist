@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorPrimaryDark"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ProfileActivity">
@@ -14,10 +15,10 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="28dp"
         android:layout_marginBottom="30dp"
+        android:textSize="18sp"
         android:text="@string/changePassword"
         android:textAllCaps="false"
         app:layout_constraintBottom_toTopOf="@+id/accountDeleteButton"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toRightOf="@+id/guideline1"
         app:layout_constraintRight_toRightOf="parent" />
 
@@ -29,10 +30,10 @@
         android:layout_marginLeft="28dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="30dp"
+        android:textSize="18sp"
         android:text="@string/changeEmail"
         android:textAllCaps="false"
         app:layout_constraintBottom_toTopOf="@+id/accountDeleteButton"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/guideline1" />
 
@@ -43,10 +44,10 @@
         android:layout_marginStart="114dp"
         android:layout_marginEnd="114dp"
         android:layout_marginBottom="20dp"
+        android:textSize="18sp"
         android:text="@string/deleteAccount"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.482"
         app:layout_constraintStart_toStartOf="parent"
         android:textAllCaps="false"
         app:backgroundTint="@color/red"/>
