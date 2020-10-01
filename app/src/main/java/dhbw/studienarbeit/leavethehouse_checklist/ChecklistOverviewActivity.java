@@ -66,16 +66,13 @@ public class ChecklistOverviewActivity extends BaseActivity {
 
         overviewList = findViewById(R.id.overviewListView);
 
-
-        sampleText = findViewById(R.id.sampleTextView);
         noListTextView = findViewById(R.id.noListTextView);
 
         addListButton = findViewById(R.id.addListButton);
 
         checklistTitleList = new ArrayList<>();
         checklistMap = new ArrayList<>();
-        selectedList= new Checklist();
-
+        selectedList = new Checklist();
 
 
 //        sampleItems.add("item 1");
@@ -86,12 +83,8 @@ public class ChecklistOverviewActivity extends BaseActivity {
         uid = getUid();
 
 
-        checklistFuture=getChecklistData(uid);
+        checklistFuture = getChecklistData(uid);
         updateList();
-
-
-
-
 
 
         overviewList.setOnItemClickListener((parent, view, position, id) -> {
@@ -99,15 +92,15 @@ public class ChecklistOverviewActivity extends BaseActivity {
             //getUserChecklistIds();
             //checklistFuture=getChecklistData(uid);
 
-            String clickedTitle= checklistTitleList.get(position);
+            String clickedTitle = checklistTitleList.get(position);
 
             //Todo: überprüfen ob das funktioniert: Map = Arraylist size=5 aber leer
-            for(Map map : checklistMap){
-                if(String.valueOf(map.get("title")).equals(clickedTitle)){
+            for (Map map : checklistMap) {
+                if (String.valueOf(map.get("title")).equals(clickedTitle)) {
 
                     selectedList.setId(String.valueOf(map.get("id")));
                     selectedList.setTitle(String.valueOf(map.get("title")));
-                    selectedList.setTasks((ArrayList<String>)map.get("tasks"));
+                    selectedList.setTasks((ArrayList<String>) map.get("tasks"));
                     selectedList.setUserid(String.valueOf(map.get("userid")));
 
                     repository.setSelectedList(selectedList);
@@ -121,40 +114,43 @@ public class ChecklistOverviewActivity extends BaseActivity {
 
             Intent intent = new Intent(ChecklistOverviewActivity.this, TaskChecklistActivity.class);
             startActivity(intent);
+            finish();
 
         });
 
         addListButton.setOnClickListener(view -> {
-            Toast.makeText(ChecklistOverviewActivity.this, "clicked on add", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(ChecklistOverviewActivity.this, AddListActivity.class);
+            startActivity(intent);
+            finish();
         });
 
 
     }
 
 
-
     private void updateList() {
         checklistFuture.onSuccessTask(checklists -> {
-           checklists.forEach(checklist -> {
-               checklistTitleList.add(checklist.getTitle());
-               Map<String, Object> tmpMap = new HashMap<>();
-               tmpMap.put("id", checklist.getId());
-               tmpMap.put("userid", checklist.getUserid());
-               tmpMap.put("title", checklist.getTitle());
-               tmpMap.put("tasks", checklist.getTasks());;
-               checklistMap.add(tmpMap);
-               Log.d(TAG, "Titel: " + checklist.getTitle());
-               Log.d(TAG, "Tasks: " + checklist.getTasks());
-           });
-           repository.setAllListsOfUser(checklists);
+            checklists.forEach(checklist -> {
+                checklistTitleList.add(checklist.getTitle());
+                Map<String, Object> tmpMap = new HashMap<>();
+                tmpMap.put("id", checklist.getId());
+                tmpMap.put("userid", checklist.getUserid());
+                tmpMap.put("title", checklist.getTitle());
+                tmpMap.put("tasks", checklist.getTasks());
+                ;
+                checklistMap.add(tmpMap);
+                Log.d(TAG, "Titel: " + checklist.getTitle());
+                Log.d(TAG, "Tasks: " + checklist.getTasks());
+            });
+            repository.setAllListsOfUser(checklists);
 
 //           Log.d(TAG, "145: Titel in Map " +String.valueOf(checklistMap.get(1).get("title")));
 
-            if (checklistTitleList.isEmpty()){
+            if (checklistTitleList.isEmpty()) {
                 noListTextView.setText(getString(R.string.noLists));
             }
             setListItems(overviewList, checklistTitleList);
-           return null;
+            return null;
         });
 
     }
@@ -166,9 +162,8 @@ public class ChecklistOverviewActivity extends BaseActivity {
     }
 
     /**
-     *
-     * @param uid uid of current user
-     * @param title title of the new checklist
+     * @param uid    uid of current user
+     * @param title  title of the new checklist
      * @param tasks
      * @param titles Titles of existing checklists for current user
      */
@@ -176,10 +171,10 @@ public class ChecklistOverviewActivity extends BaseActivity {
         Map<String, Object> newChecklist = new HashMap<>();
 
         // check if list title exists for current user - No equal titles are allowed.
-        if(titles.stream().anyMatch(titleToMatch -> titleToMatch.equalsIgnoreCase(title))) {
+        if (titles.stream().anyMatch(titleToMatch -> titleToMatch.equalsIgnoreCase(title))) {
             // Fehlermeldung, Eintrag bereits vorhanden
-            Toast.makeText(ChecklistOverviewActivity.this,  title +" existiert bereits. Bitte anderen Titel wählen.", Toast.LENGTH_SHORT).show();
-        }else{
+            Toast.makeText(ChecklistOverviewActivity.this, title + getString(R.string.errorTitleExists), Toast.LENGTH_SHORT).show();
+        } else {
             newChecklist.put("userid", uid);
             newChecklist.put("title", title);
             newChecklist.put("tasks", tasks);
@@ -202,7 +197,7 @@ public class ChecklistOverviewActivity extends BaseActivity {
     }
 
 
-// wahrscheinlich unnötig. Die checklist-Tabelle kann direkt anhand der userid gefiltert werden (Ref.whereEqualTo(...).get())
+    // wahrscheinlich unnötig. Die checklist-Tabelle kann direkt anhand der userid gefiltert werden (Ref.whereEqualTo(...).get())
     public void getUserChecklistIds() {
 
         final DocumentReference userDocRef = mDatabase.collection("User").document(uid);
@@ -217,8 +212,7 @@ public class ChecklistOverviewActivity extends BaseActivity {
                         message.setText("Bitte Checkliste anlegen");
                     } else if (documentSnapshot.get("checklistid") instanceof List) {
                         checklistid = (List<String>) documentSnapshot.get("checklistid");
-                        // bitte wieder löschen:
-                        sampleText.setText("Anzahl der Listen: " + checklistid.size() + " Erster Eintrag: " + checklistid.get(0));
+
                     } else {
                         throw new AssertionError("Should be a List with Strings");
                     }
@@ -229,7 +223,7 @@ public class ChecklistOverviewActivity extends BaseActivity {
 
 
     public Task<List<Checklist>> getChecklistData(String uid) {
-        if (uid == null){
+        if (uid == null) {
             throw new AssertionError("Uid should never be null. User should be logged in.");
         }
 
@@ -237,19 +231,19 @@ public class ChecklistOverviewActivity extends BaseActivity {
 
         CollectionReference checklistRef = mDatabase.collection(CHECKLIST);
 
-        Task<QuerySnapshot> checklistDatabaseTask =checklistRef.whereEqualTo("userid", uid).get();
-                checklistDatabaseTask.addOnSuccessListener( queryDocumentSnapshots -> {
+        Task<QuerySnapshot> checklistDatabaseTask = checklistRef.whereEqualTo("userid", uid).get();
+        checklistDatabaseTask.addOnSuccessListener(queryDocumentSnapshots -> {
 
-                    checklist.setResult(queryDocumentSnapshots.getDocuments().stream().map(documentSnapshot ->
+            checklist.setResult(queryDocumentSnapshots.getDocuments().stream().map(documentSnapshot ->
 
-                            new Checklist.ChecklistBuilder().setId(documentSnapshot.getId())
+                    new Checklist.ChecklistBuilder().setId(documentSnapshot.getId())
                             .setTitle(documentSnapshot.getString("title"))
                             .setTasks((ArrayList<String>) documentSnapshot.get("tasks"))
                             .setUserid(documentSnapshot.getString("userid"))
                             .build()).collect(Collectors.toList()));
-                });
+        });
 
-                return checklist.getTask();
+        return checklist.getTask();
     }
 
 

@@ -12,8 +12,21 @@
         android:id="@+id/deleteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/deleteTasks"
+        android:textAllCaps="false"
+        app:backgroundTint="@color/red"
+        app:layout_constraintBottom_toTopOf="@id/deleteListButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/deleteListButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:text="@string/deleteList"
         android:textAllCaps="false"
         app:backgroundTint="@color/red"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -32,7 +45,7 @@
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/accessTextView" />
 
 
     <Button
@@ -44,7 +57,7 @@
         android:layout_marginEnd="16dp"
         android:text="@string/edit"
         android:textAllCaps="false"
-        app:layout_constraintLeft_toRightOf="@id/titleTextView"
+        app:layout_constraintLeft_toRightOf="@id/accessTextView"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -65,7 +78,7 @@
         app:layout_constraintTop_toBottomOf="@+id/newTaskButton" />
 
     <TextView
-        android:id="@+id/titleTextView"
+        android:id="@+id/accessTextView"
         android:layout_width="257dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"

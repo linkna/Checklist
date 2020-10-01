@@ -30,4 +30,10 @@
     <string name="newTitle">neuer Titel</string>
     <string name="errorTitleExists">Es existiert bereits eine Liste mit dieser Bezeichnung. Andere Bezeichnung wählen.</string>
     <string name="errorEmptyTextfield">Eingabe darf nicht leer sein.</string>
+    <string name="sign_up">Registrieren</string>
+    <string name="add">hinzufügen</string>
+    <string name="deleteList">Liste Löschen</string>
+    <string name="emptyTasks">Bitte Aufgaben hinzufügen. Aufgabenliste darf nicht leer sein.</string>
+    <string name="noEmptyTasks">Leere Aufgabenliste nicht zulässig. Bitte komplette Liste löschen.</string>
+
 </resources>
