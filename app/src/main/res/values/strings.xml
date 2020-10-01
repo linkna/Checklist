@@ -27,4 +27,6 @@
     <string name="cancel">Abbrechen</string>
     <string name="accessDelete">Wirklich Löschen?</string>
     <string name="delete">Löschen</string>
+    <string name="newTitle">neuer Titel</string>
+    <string name="errorTitleExists">Es existiert bereits eine Liste mit dieser Bezeichnung. Andere Bezeichnung wählen.</string>
 </resources>

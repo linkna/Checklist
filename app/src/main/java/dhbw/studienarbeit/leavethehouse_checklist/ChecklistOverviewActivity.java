@@ -75,6 +75,9 @@ public class ChecklistOverviewActivity extends BaseActivity {
         checklistTitleList = new ArrayList<>();
         checklistMap = new ArrayList<>();
         selectedList= new Checklist();
+
+
+
 //        sampleItems.add("item 1");
 //        sampleItems.add("item 2");
 
@@ -143,6 +146,7 @@ public class ChecklistOverviewActivity extends BaseActivity {
                Log.d(TAG, "Titel: " + checklist.getTitle());
                Log.d(TAG, "Tasks: " + checklist.getTasks());
            });
+           repository.setAllListsOfUser(checklists);
 
 //           Log.d(TAG, "145: Titel in Map " +String.valueOf(checklistMap.get(1).get("title")));
 
@@ -168,7 +172,7 @@ public class ChecklistOverviewActivity extends BaseActivity {
      * @param tasks
      * @param titles Titles of existing checklists for current user
      */
-    public void setChecklist(String uid, String title, List<String> tasks, List<String> titles) {
+    public void writeChecklist(String uid, String title, List<String> tasks, List<String> titles) {
         Map<String, Object> newChecklist = new HashMap<>();
 
         // check if list title exists for current user - No equal titles are allowed.

@@ -10,6 +10,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 public class TaskChecklistActivity extends BaseActivity {
 
@@ -23,8 +25,22 @@ public class TaskChecklistActivity extends BaseActivity {
         Repository repository = Repository.getInstance();
         Checklist selectedList=repository.getSelectedList();
 
-
         getSupportActionBar().setTitle(selectedList.getTitle());
+
+
+//        MutableLiveData<Checklist> listenList = new MutableLiveData<>();
+//
+//        listenList.setValue(repository.getSelectedList()); //Initilize with a value
+//
+//        listenList.observe(this, new Observer <Checklist> () {
+//            @Override
+//            public void onChanged(Checklist list) {
+//                getSupportActionBar().setTitle(list.getTitle());
+//                Log.d("LiveData ", list.getTitle() );
+//            }
+//        });
+
+
 
         ArrayAdapter<String> mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, selectedList.getTasks());
         taskList.setAdapter(mAdapter);
@@ -35,6 +51,12 @@ public class TaskChecklistActivity extends BaseActivity {
 
     public void editListLabelClick(View view) {
         Intent intent = new Intent(TaskChecklistActivity.this, EditListActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void onBackPressed (){
+        Intent intent = new Intent(TaskChecklistActivity.this, ChecklistOverviewActivity.class);
         startActivity(intent);
     }
 }

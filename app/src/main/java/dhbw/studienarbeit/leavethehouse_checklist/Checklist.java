@@ -9,6 +9,8 @@ class Checklist {
     private String userid;
     private List<String> tasks;
 
+
+
     public Checklist(){}
 
     public Checklist(String id, String title, String userid, List<String> tasks) {
