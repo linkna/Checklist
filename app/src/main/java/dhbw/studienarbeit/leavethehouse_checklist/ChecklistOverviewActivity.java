@@ -257,5 +257,8 @@ public class ChecklistOverviewActivity extends BaseActivity {
         Log.d(TAG, "no user is logged in");
         return null;
     }
+    public void onBackPressed() {
+        finish();
+    }
 
 }

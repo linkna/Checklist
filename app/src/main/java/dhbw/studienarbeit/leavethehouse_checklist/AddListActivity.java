@@ -109,4 +109,9 @@ public class AddListActivity extends AppCompatActivity {
             finish();
         });
     }
+    public void onBackPressed() {
+        Intent intent = new Intent(AddListActivity.this, ChecklistOverviewActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

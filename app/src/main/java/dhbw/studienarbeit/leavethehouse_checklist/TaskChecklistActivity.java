@@ -58,5 +58,6 @@ public class TaskChecklistActivity extends BaseActivity {
     public void onBackPressed (){
         Intent intent = new Intent(TaskChecklistActivity.this, ChecklistOverviewActivity.class);
         startActivity(intent);
+        finish();
     }
 }
