@@ -5,6 +5,9 @@
     <item android:id="@+id/overview"
         android:title="@string/listOverview"
         app:showAsAction="never"/>
+    <item android:id="@+id/lastAction"
+        android:title="@string/last_action"
+        app:showAsAction="never"/>
     <item android:id="@+id/profil"
         android:title="@string/profil"
         app:showAsAction="never"/>

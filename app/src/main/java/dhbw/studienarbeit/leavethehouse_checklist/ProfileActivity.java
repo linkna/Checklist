@@ -1,5 +1,6 @@
 package dhbw.studienarbeit.leavethehouse_checklist;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -53,5 +54,11 @@ public class ProfileActivity extends BaseActivity {
         );
 
 
+    }
+
+    public void onBackPressed() {
+        Intent intent = new Intent(ProfileActivity.this, ChecklistOverviewActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

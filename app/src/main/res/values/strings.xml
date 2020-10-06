@@ -14,7 +14,7 @@
     <string name="deleteAccount">Account löschen</string>
     <string name="changeEmail">E-Mail ändern</string>
     <string name="changePassword">Passwort ändern</string>
-    <string name="noLists">\"Es wurden noch keine Listen angelegt\"</string>
+    <string name="noLists">Es wurden noch keine Listen angelegt</string>
     <string name="login">Login</string>
     <string name="editList">Liste bearbeiten</string>
     <string name="save">Speichern</string>
@@ -35,5 +35,8 @@
     <string name="deleteList">Liste Löschen</string>
     <string name="emptyTasks">Bitte Aufgaben hinzufügen. Aufgabenliste darf nicht leer sein.</string>
     <string name="noEmptyTasks">Leere Aufgabenliste nicht zulässig. Bitte komplette Liste löschen.</string>
+    <string name="last_used_list">Zuletzt verwendete Liste:</string>
+    <string name="last_action">zuletzt verwendete Checkliste</string>
+    <string name="no_used_list">Noch keine Checkliste verwendet.</string>
 
 </resources>

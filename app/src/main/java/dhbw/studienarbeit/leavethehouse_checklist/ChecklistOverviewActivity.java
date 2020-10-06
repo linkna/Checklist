@@ -46,7 +46,7 @@ public class ChecklistOverviewActivity extends BaseActivity {
     Task<List<Checklist>> checklistFuture;
 
 
-    private static final String TAG = "MyActivity";
+    private static final String TAG = "ChecklistOverviewActivity";
     private TextView noListTextView;
     private List<Map<String, Object>> checklistMap;
     private Checklist selectedList;

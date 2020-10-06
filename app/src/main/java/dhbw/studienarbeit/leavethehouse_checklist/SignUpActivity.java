@@ -55,8 +55,10 @@ public class SignUpActivity extends AppCompatActivity {
 
                 String email = inputEmail.getText().toString();
                 final String password = inputPassword.getText().toString();
+                String firstname = inputFirstName.getText().toString();
+                String lastname = inputLastName.getText().toString();
 
-                if (validateInput(email, password)) {
+                if (validateInput(email, password, firstname,lastname)) {
 
                     userInput.put("firstname", inputFirstName.getText().toString());
                     userInput.put("lastname", inputLastName.getText().toString());
@@ -66,7 +68,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
 
-                                    Toast.makeText(SignUpActivity.this, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
+                                    // Toast.makeText(SignUpActivity.this, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
 
                                     // If sign in fails, display a message to the user. If sign in succeeds
                                     // the auth state listener will be notified and logic to handle the
@@ -80,6 +82,7 @@ public class SignUpActivity extends AppCompatActivity {
                                         startActivity(new Intent(SignUpActivity.this, ChecklistOverviewActivity.class));
 
                                         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                                        if (currentUser == null) throw new AssertionError();
                                         String uid = currentUser.getUid();
                                         //save data to database. Table: User: document generated with current users uid.
                                         mDatabase.collection("User").document(uid).set(userInput);
@@ -94,7 +97,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
-    private boolean validateInput(String email, String password) {
+    private boolean validateInput(String email, String password, String firstname, String lastname) {
 
         boolean isInputValid = true;
 
@@ -116,11 +119,25 @@ public class SignUpActivity extends AppCompatActivity {
             inputEmail.setError("Bitte gültiges Email-Adressen-Format eingeben");
             isInputValid = false;
         }
+        if (TextUtils.isEmpty(firstname)) {
+            inputFirstName.setError("Vorname eingeben");
+            isInputValid = false;
+        }
+        if (TextUtils.isEmpty(lastname)) {
+            inputLastName.setError("Nachname eingeben");
+            isInputValid = false;
+        }
 
         return isInputValid;
     }
 
     boolean isEmailValid(String email) {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    public void onBackPressed () {
+        Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

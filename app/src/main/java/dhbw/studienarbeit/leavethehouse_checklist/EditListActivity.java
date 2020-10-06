@@ -231,7 +231,7 @@ public class EditListActivity extends BaseActivity {
                 taskListPopup.setAdapter(myAdapter);
 
                 deleteBtnPopup.setOnClickListener(v1 -> {
-                    if (tasksToDelete.size() != taskList.size()) {
+//                    if (tasksToDelete.size() != taskList.size()) {
                         for (String task : tasksToDelete) {
                             taskList.remove(task);
                         }
@@ -255,9 +255,10 @@ public class EditListActivity extends BaseActivity {
                         List<String> list = new ArrayList<String>();
                         myAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, (String[]) list.toArray(new String[0]));
                         taskListPopup.setAdapter(myAdapter);
-                    } else {
-                        Toast.makeText(EditListActivity.this, R.string.noEmptyTasks, Toast.LENGTH_SHORT).show();
-                    }
+//                    }
+//                        else {
+//                        Toast.makeText(EditListActivity.this, R.string.noEmptyTasks, Toast.LENGTH_SHORT).show();
+//                    }
                 });
                 cancelDeleteBtnPopup.setOnClickListener(v1 ->{
                     List<String> list = new ArrayList<String>();

@@ -3,7 +3,9 @@ package dhbw.studienarbeit.leavethehouse_checklist;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Repository {
     FirebaseUser currentUser;
@@ -12,9 +14,12 @@ public class Repository {
     Checklist selectedList;
     List<Checklist> allListsOfUser;
 
+    Map<Integer, String> checkedItems;
+
     //Singleton-Pattern
 
     private static final Repository instance = new Repository();
+
 
     public static Repository getInstance() {
         return instance;
@@ -61,5 +66,13 @@ public class Repository {
 
     public void setUserDocumentSnapshot(DocumentSnapshot userDocumentSnapshot) {
         this.userDocumentSnapshot = userDocumentSnapshot;
+    }
+
+    public Map<Integer, String> getCheckedItems() {
+        return checkedItems;
+    }
+
+    public void setCheckedItems(Map<Integer, String> checkedItems) {
+        this.checkedItems = checkedItems;
     }
 }

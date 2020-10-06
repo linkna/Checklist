@@ -1,21 +1,23 @@
 package dhbw.studienarbeit.leavethehouse_checklist;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText inputEmail, inputPassword;
@@ -23,6 +25,10 @@ public class LoginActivity extends AppCompatActivity {
 
     public FirebaseAuth auth;
     private FirebaseFirestore mDatabase;
+
+    private static final String TAG = "LoginActivity";
+    private Set<String> allTasksInSelectedList;
+    private Set<String> checkedTaskPositions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +40,22 @@ public class LoginActivity extends AppCompatActivity {
 
         // check if user is signed in. getCurrentUser() will be null if not signed in
         if (auth.getCurrentUser() != null) {
-            Intent intent = new Intent(LoginActivity.this, ChecklistOverviewActivity.class);
-            startActivity(intent);
-            finish();
+//            // wenn shared Preference gesetzt, Übersicht it erfüllten Aufgaben anzeigen, aber schreibgeschützt.
+
+            Log.d(TAG, "User: " + auth.getCurrentUser().getEmail());
+            SharedPreferences sharedPreferences = this.getSharedPreferences("checkedItems", Context.MODE_PRIVATE);
+////
+            if (sharedPreferences != null && !sharedPreferences.getAll().isEmpty()) {
+
+                Intent intent = new Intent(LoginActivity.this, LastActionActivity.class);
+                startActivity(intent);
+                finish();
+
+            } else {
+                Intent intent = new Intent(LoginActivity.this, ChecklistOverviewActivity.class);
+                startActivity(intent);
+                finish();
+            }
         }
 
         inputEmail = (EditText) findViewById(R.id.emailEditText);
@@ -84,7 +103,12 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void signUpLabelClick(View view) {
-        setContentView(R.layout.activity_sign_up);
+//        setContentView(R.layout.activity_sign_up);
         startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
+        finish();
+    }
+
+    public void forgotPasswordLabelClick(View view) {
+
     }
 }
