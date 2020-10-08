@@ -111,4 +111,8 @@ public class LoginActivity extends AppCompatActivity {
     public void forgotPasswordLabelClick(View view) {
 
     }
+
+    public void onBackPressed () {
+        finish();
+    }
 }

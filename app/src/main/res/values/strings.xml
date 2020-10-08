@@ -6,8 +6,8 @@
     <string name="firstname">Vorname</string>
     <string name="lastname">Nachname</string>
     <string name="signUp">Noch kein Konto? \n Registrieren</string>
-    <string name="minimum_password">Password too short, enter minimum 6 characters!</string>
-    <string name="auth_failed">Authentication failed, check your email and password or sign up</string>
+    <string name="minimum_password">Passwort zu kurz. Mindestlänge 6 Zeichen!</string>
+    <string name="auth_failed">Fehler. E-Mail und Passwort überprüfen</string>
     <string name="listOverview">Meine Listen</string>
     <string name="profil">Profil</string>
     <string name="logout">Logout</string>
@@ -25,7 +25,7 @@
     <string name="newTask">neue Aufgabe hinzufügen</string>
     <string name="saveTask">Aufgabe hinzufügen</string>
     <string name="cancel">Abbrechen</string>
-    <string name="accessDelete">Wirklich Löschen?</string>
+    <string name="accessDelete">endgültig Löschen?</string>
     <string name="delete">Löschen</string>
     <string name="newTitle">neuer Titel</string>
     <string name="errorTitleExists">Es existiert bereits eine Liste mit dieser Bezeichnung. Andere Bezeichnung wählen.</string>
@@ -38,5 +38,7 @@
     <string name="last_used_list">Zuletzt verwendete Liste:</string>
     <string name="last_action">zuletzt verwendete Checkliste</string>
     <string name="no_used_list">Noch keine Checkliste verwendet.</string>
+    <string name="deletion_failed">Fehler beim Löschen</string>
+    <string name="error_email_valid">Bitte gültiges Email-Adressen-Format eingeben</string>
 
 </resources>

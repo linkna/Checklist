@@ -14,16 +14,9 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class BaseActivity extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
-    private SharedPreferences.Editor editor;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAuth = FirebaseAuth.getInstance();
-
-        SharedPreferences sharedPreferences = this.getSharedPreferences("checkedItems", Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -35,16 +28,17 @@ public class BaseActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         String title = (String) item.getTitle();
         if (title.equalsIgnoreCase(getString(R.string.logout))) {
-            editor.clear();
-            editor.apply();
-            mAuth.signOut();
-            startActivity(new Intent(this, LoginActivity.class));
+            startActivity(new Intent(this, LogoutActivity.class));
+            finish();
         } else if (title.equalsIgnoreCase(getString(R.string.profil))) {
             startActivity(new Intent(this, ProfileActivity.class));
+            finish();
         } else if (title.equalsIgnoreCase(getString(R.string.listOverview))) {
             startActivity(new Intent(this, ChecklistOverviewActivity.class));
+            finish();
         }else if(title.equalsIgnoreCase(getString(R.string.last_action))){
             startActivity(new Intent(this, LastActionActivity.class));
+            finish();
         }
 
         //respond to menu item selection
