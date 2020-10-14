@@ -1,6 +1,5 @@
 package dhbw.studienarbeit.leavethehouse_checklist;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class LastActionActivity extends BaseActivity {
 
@@ -31,7 +29,7 @@ public class LastActionActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_last_action);
 
-        TextView titleTextView = findViewById(R.id.titleTextView);
+        TextView titleTextView = findViewById(R.id.accessTextView);
         ListView taskListView = findViewById(R.id.taskOverviewListView);
         Button listOverviewButton = findViewById(R.id.continueButton);
 
@@ -44,8 +42,6 @@ public class LastActionActivity extends BaseActivity {
             Log.d(TAG, "shared preference " + sharedPreferences.getAll().keySet());
             Set<String> keySet = sharedPreferences.getAll().keySet();
 
-            AtomicReference<String> listTitle = new AtomicReference<>();
-
             for (String element : keySet) {
                 Log.d(TAG, "shared preference key: " + element);
                 if (element.equalsIgnoreCase("allTasksInSelectedList")) {
@@ -54,7 +50,7 @@ public class LastActionActivity extends BaseActivity {
                     ArrayAdapter<String> mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, allTasks);
                     taskListView.setAdapter(mAdapter);
                 } else {
-                    listTitle.set(element);
+
                     titleTextView.setText(element);
                     checkedTaskPositions = sharedPreferences.getStringSet(element, null);
                     if (checkedTaskPositions == null) throw new AssertionError();
@@ -62,7 +58,9 @@ public class LastActionActivity extends BaseActivity {
                         taskListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, allTasks) {
                             @Override
                             public View getView(int pos, View convertView, ViewGroup parent) {
+
                                 View row = super.getView(pos, convertView, parent);
+
 
                                 if (checkedTaskPositions.contains(String.valueOf(pos))) {                                    // do something change color
                                     row.setBackgroundColor(getResources().getColor(R.color.colorAccent));
@@ -74,6 +72,7 @@ public class LastActionActivity extends BaseActivity {
                                 return row;
                             }
                         });
+
 //                    }
 
                     }

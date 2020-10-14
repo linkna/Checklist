@@ -1,6 +1,8 @@
 package dhbw.studienarbeit.leavethehouse_checklist;
 
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 class Checklist {
@@ -43,6 +45,7 @@ class Checklist {
 
         public ChecklistBuilder setTasks(List<String> tasks) {
             this.tasks = tasks;
+            Collections.sort(this.tasks, String.CASE_INSENSITIVE_ORDER);
             return this;
         }
 

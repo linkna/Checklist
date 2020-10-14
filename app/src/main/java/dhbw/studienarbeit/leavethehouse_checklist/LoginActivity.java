@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // check if user is signed in. getCurrentUser() will be null if not signed in
         if (auth.getCurrentUser() != null) {
-//            // wenn shared Preference gesetzt, Übersicht it erfüllten Aufgaben anzeigen, aber schreibgeschützt.
+//            // wenn shared Preference gesetzt, Übersicht mit erfüllten Aufgaben anzeigen, aber schreibgeschützt.
 
             Log.d(TAG, "User: " + auth.getCurrentUser().getEmail());
             SharedPreferences sharedPreferences = this.getSharedPreferences("checkedItems", Context.MODE_PRIVATE);

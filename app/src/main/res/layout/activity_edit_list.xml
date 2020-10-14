@@ -9,7 +9,7 @@
 
 
     <Button
-        android:id="@+id/deleteButton"
+        android:id="@+id/deleteTasksButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -35,17 +35,31 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/newTaskButton"
-        android:layout_width="0dp"
+        android:id="@+id/addTaskButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
-        android:text="@string/newTask"
+        android:text="@string/add"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/taskEditText"
         app:layout_constraintTop_toBottomOf="@+id/accessTextView" />
+
+    <EditText
+        android:id="@+id/taskEditText"
+        style="@style/MyEditTextstyle"
+        android:layout_width="268dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/newTask"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTitleButton" />
 
 
     <Button
@@ -71,11 +85,11 @@
         android:layout_marginBottom="4dp"
         android:background="@color/brown"
         android:choiceMode="multipleChoice"
-        app:layout_constraintBottom_toTopOf="@+id/deleteButton"
+        app:layout_constraintBottom_toTopOf="@+id/deleteTasksButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newTaskButton" />
+        app:layout_constraintTop_toBottomOf="@+id/addTaskButton" />
 
     <TextView
         android:id="@+id/accessTextView"

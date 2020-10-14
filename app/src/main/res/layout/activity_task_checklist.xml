@@ -16,7 +16,6 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="16dp"
         android:text="@string/send"
-        android:visibility="invisible"
         android:textAllCaps="false"
         app:layout_constraintLeft_toLeftOf="@id/guideline1"
         app:layout_constraintRight_toRightOf="parent"
@@ -47,6 +46,19 @@
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/shareListTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:onClick="shareListLabelClick"
+        android:text="@string/shareList"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

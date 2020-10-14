@@ -14,10 +14,10 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +44,7 @@ public class AddListActivity extends AppCompatActivity {
         String uid = repository.getUid();
         allListsOfUser = repository.getAllListsOfUser();
 
-        Button addBtn = findViewById(R.id.addButton);
+        Button addTaskBtn = findViewById(R.id.addTaskButton);
         Button saveBtn = findViewById(R.id.saveButton);
         Button cancelBtn = findViewById(R.id.cancelButton);
 
@@ -54,13 +54,20 @@ public class AddListActivity extends AppCompatActivity {
         ListView taskListView = findViewById(R.id.taskOverviewListView);
         List<String> taskList = new ArrayList();
 
-        addBtn.setOnClickListener(v -> {
+        addTaskBtn.setOnClickListener(v -> {
             String task = taskEditText.getText().toString();
-            if (!task.isEmpty()) {
-                taskList.add(task);
-                taskEditText.setText("");
-                myAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, taskList);
-                taskListView.setAdapter(myAdapter);
+            if (!task.isEmpty()||task.trim().length()!=0) {
+                if(taskList.contains(task)){
+                    taskEditText.setError(getString(R.string.errorTaskExists));
+                }else {
+                    taskList.add(task.trim());
+                    Collections.sort(taskList, String.CASE_INSENSITIVE_ORDER);
+                    taskEditText.setText("");
+                    myAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, taskList);
+                    taskListView.setAdapter(myAdapter);
+                }
+            }else {
+                taskEditText.setError(getString(R.string.error_empty_textfield));
             }
         });
 
@@ -68,8 +75,8 @@ public class AddListActivity extends AppCompatActivity {
             String newTitle = titleEditText.getText().toString();
             Map<String, Object> newChecklist = new HashMap<>();
             ArrayList<String> checklistTitleList = new ArrayList<>();
-            if (newTitle.isEmpty()) {
-                titleEditText.setError(getString(R.string.errorEmptyTextfield));
+            if (newTitle.isEmpty()||newTitle.trim().length()==0) {
+                titleEditText.setError(getString(R.string.error_empty_textfield));
             } else {
                 // check if list title exists for current user - No equal titles are allowed.
                 allListsOfUser.forEach(checklist -> checklistTitleList.add(checklist.getTitle()));

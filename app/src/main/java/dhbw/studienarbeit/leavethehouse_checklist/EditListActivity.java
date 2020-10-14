@@ -20,10 +20,13 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class EditListActivity extends BaseActivity {
 
+    private static final String TAG = "EditListActivity";
     private TextView title;
 
     private Button saveEditTextPopupBtn;
@@ -59,13 +62,13 @@ public class EditListActivity extends BaseActivity {
         listId = selectedList.getId();
         List<String> taskList = selectedList.getTasks();
 
-        getSupportActionBar().setTitle(R.string.editList);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.editList);
 
         taskListView = findViewById(R.id.taskOverviewListView);
         title = findViewById(R.id.accessTextView);
         Button editTitleBtn = findViewById(R.id.editTitleButton);
-        Button newTaskBtn = findViewById(R.id.newTaskButton);
-        Button deleteTaskBtn = findViewById(R.id.deleteButton);
+        Button addTaskBtn = findViewById(R.id.addTaskButton);
+        Button deleteTaskBtn = findViewById(R.id.deleteTasksButton);
         Button deleteListBtn = findViewById(R.id.deleteListButton);
 
         myAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, taskList);
@@ -103,7 +106,7 @@ public class EditListActivity extends BaseActivity {
                 editTextPopup.setText("");
 
                 if (newTitle.isEmpty()) {
-                    editTextPopup.setError(getString(R.string.errorEmptyTextfield));
+                    editTextPopup.setError(getString(R.string.error_empty_textfield));
                 } else {
                     // check if list title exists for current user - No equal titles are allowed.
                     allListsOfUser.forEach(checklist -> checklistTitleList.add(checklist.getTitle()));
@@ -115,61 +118,52 @@ public class EditListActivity extends BaseActivity {
 
                         ref.update("title", newTitle)
                                 .addOnSuccessListener(aVoid -> {
-                                    Log.d("Update db Title", "db updated with title ");
                                     selectedList.setTitle(newTitle);
                                     repository.setSelectedList(selectedList);
                                     title.setText(newTitle);
                                     editTextPopupWindow.dismiss();
                                 })
                                 .addOnFailureListener(e -> {
-                                    Log.w("Update database", "Error writing document", e);
-                                    Toast.makeText(EditListActivity.this, "Fehler beim speichern.", Toast.LENGTH_SHORT).show();
+                                    Log.d(TAG, getString(R.string.error_writing_to_db), e);
+                                    Toast.makeText(EditListActivity.this, getString(R.string.saving_failed), Toast.LENGTH_SHORT).show();
                                 });
                     }
                 }
             });
             cancelEditTextBtnPopup.setOnClickListener(v1 -> {
                 editTextPopup.setText("");
-//                Toast.makeText(EditListActivity.this, "clicked on cancel", Toast.LENGTH_SHORT).show();
                 editTextPopupWindow.dismiss();
             });
         });
 
 
-        newTaskBtn.setOnClickListener(v -> {
-            inputType.setText(R.string.newTask);
-            // show the popup window
-            editTextPopupWindow.showAtLocation(v, Gravity.BOTTOM, 0, 0);
-
-            saveEditTextPopupBtn.setOnClickListener(v1 -> {
-                String newTask = editTextPopup.getText().toString();
-                if (newTask.isEmpty()) {
-                    editTextPopup.setError(getString(R.string.errorEmptyTextfield));
+        addTaskBtn.setOnClickListener(v -> {
+            TextView taskEditText = findViewById(R.id.taskEditText);
+            String task = taskEditText.getText().toString();
+            if (!task.isEmpty() || task.trim().length() != 0) {
+                if (taskList.contains(task)) {
+                    taskEditText.setError(getString(R.string.errorTaskExists));
                 } else {
-                    editTextPopup.setText("");
-                    taskList.add(newTask);
+                    taskList.add(task.trim());
+                    Collections.sort(taskList, String.CASE_INSENSITIVE_ORDER);
+                    taskEditText.setText("");
+
                     DocumentReference ref = mDatabase.collection("Checklist").document(listId);
                     ref.update("tasks", taskList)
                             .addOnSuccessListener(aVoid -> {
-                                Log.d("Update db Title", "db updated with title ");
                                 selectedList.setTasks(taskList);
                                 repository.setSelectedList(selectedList);
-                                ArrayAdapter<String> myAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, taskList);
+                                myAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, taskList);
                                 taskListView.setAdapter(myAdapter);
-                                editTextPopupWindow.dismiss();
                             })
                             .addOnFailureListener(e -> {
-                                Log.w("Update database", "Error writing document", e);
-                                Toast.makeText(EditListActivity.this, "Fehler beim speichern.", Toast.LENGTH_SHORT).show();
+                                Log.w(TAG, getString(R.string.error_writing_to_db), e);
+                                Toast.makeText(EditListActivity.this, getString(R.string.saving_failed), Toast.LENGTH_SHORT).show();
                             });
                 }
-            });
-
-            cancelEditTextBtnPopup.setOnClickListener(v1 -> {
-                editTextPopup.setText("");
-//                Toast.makeText(EditListActivity.this, "clicked on cancel", Toast.LENGTH_SHORT).show();
-                editTextPopupWindow.dismiss();
-            });
+            } else {
+                taskEditText.setError(getString(R.string.error_empty_textfield));
+            }
         });
 
 
@@ -179,101 +173,99 @@ public class EditListActivity extends BaseActivity {
         deletePopupWindow = new PopupWindow(deletePopupView, width, height, true);
 
         cancelDeleteBtnPopup = deletePopupWindow.getContentView().findViewById(R.id.cancelButton);
-        deleteBtnPopup = deletePopupWindow.getContentView().findViewById(R.id.deleteButton);
+        deleteBtnPopup = deletePopupWindow.getContentView().findViewById(R.id.deleteTasksButton);
         taskListPopup = deletePopupWindow.getContentView().findViewById(R.id.taskOverviewListView);
         TextView titlePopup = deletePopupWindow.getContentView().findViewById(R.id.titleToDeleteTextView);
 
 
         deleteListBtn.setOnClickListener(v -> {
-                    titlePopup.setText(selectedList.getTitle());
-                    deletePopupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+            titlePopup.setVisibility(View.VISIBLE);
+            titlePopup.setText(selectedList.getTitle());
+            deletePopupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
 
 
-                    deleteBtnPopup.setOnClickListener(v1 -> {
-                        DocumentReference ref = mDatabase.collection("Checklist").document(listId);
-                        ref.delete()
-                                .addOnSuccessListener(aVoid -> {
-                                    Log.d("delete List in db ", "list deleted ");
-                                    titlePopup.setText("");
-                                    deletePopupWindow.dismiss();
-                                    Intent intent = new Intent(EditListActivity.this, ChecklistOverviewActivity.class);
-                                    startActivity(intent);
+            deleteBtnPopup.setOnClickListener(v1 -> {
+                DocumentReference ref = mDatabase.collection("Checklist").document(listId);
+                ref.delete()
+                        .addOnSuccessListener(aVoid -> {
+                            titlePopup.setText("");
+                            titlePopup.setVisibility(View.INVISIBLE);
+                            deletePopupWindow.dismiss();
+                            Intent intent = new Intent(EditListActivity.this, ChecklistOverviewActivity.class);
+                            startActivity(intent);
 
-                                })
-                                .addOnFailureListener(e -> {
-                                    titlePopup.setText("");
-                                    Log.w("Update database", "Error writing document", e);
-                                    Toast.makeText(EditListActivity.this, "Fehler beim löschen.", Toast.LENGTH_SHORT).show();
-                                });
-                    });
-                    cancelDeleteBtnPopup.setOnClickListener(v1 -> {
-                        titlePopup.setText("");
-                        deletePopupWindow.dismiss();
-                    });
-                });
-
-
-            deleteTaskBtn.setOnClickListener(v -> {
-
-                tasksToDelete = new ArrayList<>();
-                //get checked items
-                SparseBooleanArray checked = taskListView.getCheckedItemPositions();
-                for (int i = 0; i < checked.size(); i++)
-                    if (checked.valueAt(i)) {
-                        String item = taskListView.getItemAtPosition(checked.keyAt(i)).toString();
-                        tasksToDelete.add(item);
-                    }
-
-                // show the popup window
-                deletePopupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
-
-                myAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, tasksToDelete);
-                taskListPopup.setAdapter(myAdapter);
-
-                deleteBtnPopup.setOnClickListener(v1 -> {
-//                    if (tasksToDelete.size() != taskList.size()) {
-                        for (String task : tasksToDelete) {
-                            taskList.remove(task);
-                        }
-
-                        DocumentReference ref = mDatabase.collection("Checklist").document(listId);
-
-                        ref.update("tasks", taskList)
-                                .addOnSuccessListener(aVoid -> {
-                                    Log.d("Update db Title", "db updated ");
-                                    selectedList.setTasks(taskList);
-                                    repository.setSelectedList(selectedList);
-                                    myAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, taskList);
-                                    taskListView.setAdapter(myAdapter);
-
-                                    deletePopupWindow.dismiss();
-                                })
-                                .addOnFailureListener(e -> {
-                                    Log.w("Update database", "Error writing document", e);
-                                    Toast.makeText(EditListActivity.this, "Fehler beim löschen.", Toast.LENGTH_SHORT).show();
-                                });
-                        List<String> list = new ArrayList<String>();
-                        myAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, (String[]) list.toArray(new String[0]));
-                        taskListPopup.setAdapter(myAdapter);
-//                    }
-//                        else {
-//                        Toast.makeText(EditListActivity.this, R.string.noEmptyTasks, Toast.LENGTH_SHORT).show();
-//                    }
-                });
-                cancelDeleteBtnPopup.setOnClickListener(v1 ->{
-                    List<String> list = new ArrayList<String>();
-                    myAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, (String[]) list.toArray(new String[0]));
-                    taskListPopup.setAdapter(myAdapter);
-                    deletePopupWindow.dismiss();
-                });
+                        })
+                        .addOnFailureListener(e -> {
+                            titlePopup.setText("");
+                            Log.d(TAG, getString(R.string.error_writing_to_db), e);
+                            Toast.makeText(EditListActivity.this, getString(R.string.deletion_failed), Toast.LENGTH_SHORT).show();
+                        });
             });
+            cancelDeleteBtnPopup.setOnClickListener(v1 -> {
+                titlePopup.setText("");
+                titlePopup.setVisibility(View.INVISIBLE);
+                deletePopupWindow.dismiss();
+            });
+        });
 
 
-        }
+        deleteTaskBtn.setOnClickListener(v -> {
+            taskListPopup.setVisibility(View.VISIBLE);
 
-        public void onBackPressed () {
-            Intent intent = new Intent(EditListActivity.this, TaskChecklistActivity.class);
-            startActivity(intent);
-            finish();
-        }
+            tasksToDelete = new ArrayList<>();
+            //get checked items
+            SparseBooleanArray checked = taskListView.getCheckedItemPositions();
+            for (int i = 0; i < checked.size(); i++)
+                if (checked.valueAt(i)) {
+                    String item = taskListView.getItemAtPosition(checked.keyAt(i)).toString();
+                    tasksToDelete.add(item);
+                }
+
+            // show the popup window
+            deletePopupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+
+            myAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, tasksToDelete);
+            taskListPopup.setAdapter(myAdapter);
+
+            deleteBtnPopup.setOnClickListener(v1 -> {
+//                    if (tasksToDelete.size() != taskList.size()) {
+                for (String task : tasksToDelete) {
+                    taskList.remove(task);
+                }
+
+                DocumentReference ref = mDatabase.collection("Checklist").document(listId);
+
+                ref.update("tasks", taskList)
+                        .addOnSuccessListener(aVoid -> {
+                            selectedList.setTasks(taskList);
+                            repository.setSelectedList(selectedList);
+                            myAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, taskList);
+                            taskListView.setAdapter(myAdapter);
+                            taskListPopup.setVisibility(View.INVISIBLE);
+                            deletePopupWindow.dismiss();
+                        })
+                        .addOnFailureListener(e -> {
+                            Log.d(TAG, getString(R.string.error_writing_to_db), e);
+                            Toast.makeText(EditListActivity.this, getString(R.string.deletion_failed), Toast.LENGTH_SHORT).show();
+                        });
+
+                myAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new String[0]);
+                taskListPopup.setAdapter(myAdapter);
+            });
+            cancelDeleteBtnPopup.setOnClickListener(v1 -> {
+                myAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new String[0]);
+                taskListPopup.setAdapter(myAdapter);
+                taskListPopup.setVisibility(View.INVISIBLE);
+                deletePopupWindow.dismiss();
+            });
+        });
+
+
     }
+
+    public void onBackPressed() {
+        Intent intent = new Intent(EditListActivity.this, TaskChecklistActivity.class);
+        startActivity(intent);
+        finish();
+    }
+}

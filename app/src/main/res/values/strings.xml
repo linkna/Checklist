@@ -29,16 +29,22 @@
     <string name="delete">Löschen</string>
     <string name="newTitle">neuer Titel</string>
     <string name="errorTitleExists">Es existiert bereits eine Liste mit dieser Bezeichnung. Andere Bezeichnung wählen.</string>
-    <string name="errorEmptyTextfield">Eingabe darf nicht leer sein.</string>
+    <string name="errorTaskExists">Es existiert bereits eine Aufgabe mit dieser Bezeichnung. Andere Bezeichnung wählen.</string>
+    <string name="error_empty_textfield">Eingabe darf nicht leer sein.</string>
     <string name="sign_up">Registrieren</string>
     <string name="add">hinzufügen</string>
     <string name="deleteList">Liste Löschen</string>
     <string name="emptyTasks">Bitte Aufgaben hinzufügen. Aufgabenliste darf nicht leer sein.</string>
-    <string name="noEmptyTasks">Leere Aufgabenliste nicht zulässig. Bitte komplette Liste löschen.</string>
+    <string name="no_empty_tasks">Leere Aufgabenliste nicht zulässig. Bitte komplette Liste löschen.</string>
     <string name="last_used_list">Zuletzt verwendete Liste:</string>
     <string name="last_action">zuletzt verwendete Checkliste</string>
     <string name="no_used_list">Noch keine Checkliste verwendet.</string>
     <string name="deletion_failed">Fehler beim Löschen</string>
+    <string name="saving_failed">Fehler beim Speichern</string>
     <string name="error_email_valid">Bitte gültiges Email-Adressen-Format eingeben</string>
+    <string name="new_shared_list">Neue für mich freigegebene Liste. Nutze Liste importieren zum hinzufügen.</string>
+    <string name="error_writing_to_db">Error writing document</string>
+    <string name="shareList">Liste teilen</string>
+    <string name="share_with_user">Für welchen Nutzer soll die Liste freigegeben werden? Der Nutzer erhält eine Kopie der Liste.</string>
 
 </resources>
