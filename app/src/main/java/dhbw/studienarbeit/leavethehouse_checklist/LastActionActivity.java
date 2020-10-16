@@ -22,7 +22,7 @@ public class LastActionActivity extends BaseActivity {
 
     private Set<String> checkedTaskPositions;
     private List<String> allTasks;
-    String TAG = "LastActionActivity";
+    private static final String TAG = "LastActionActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

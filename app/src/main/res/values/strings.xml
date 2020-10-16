@@ -42,9 +42,14 @@
     <string name="deletion_failed">Fehler beim Löschen</string>
     <string name="saving_failed">Fehler beim Speichern</string>
     <string name="error_email_valid">Bitte gültiges Email-Adressen-Format eingeben</string>
-    <string name="new_shared_list">Neue für mich freigegebene Liste. Nutze Liste importieren zum hinzufügen.</string>
+    <string name="new_shared_list">Neue freigegebene Liste. Nutze Liste importieren zum hinzufügen.</string>
     <string name="error_writing_to_db">Error writing document</string>
     <string name="shareList">Liste teilen</string>
     <string name="share_with_user">Für welchen Nutzer soll die Liste freigegeben werden? Der Nutzer erhält eine Kopie der Liste.</string>
+    <string name="user_not_found">Benutzer existiert nicht.</string>
+    <string name="error_is_already_shared">Liste wurde für diesen Benutzer bereits freigegeben. Benutzer muss Import bestätigen.</string>
+    <string name="import_list">Liste importieren</string>
+    <string name="shared_lists">Mit mir geteilte Listen:</string>
+    <string name="no_document_in_db">Fehler in der Datenbank.</string>
 
 </resources>

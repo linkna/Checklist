@@ -1,5 +1,6 @@
 package dhbw.studienarbeit.leavethehouse_checklist;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -13,9 +14,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -29,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private Set<String> allTasksInSelectedList;
     private Set<String> checkedTaskPositions;
+    private Repository repository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +44,16 @@ public class LoginActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         mDatabase = FirebaseFirestore.getInstance();
 
+
+        repository = Repository.getInstance();
+
+
         // check if user is signed in. getCurrentUser() will be null if not signed in
         if (auth.getCurrentUser() != null) {
-//            // wenn shared Preference gesetzt, Übersicht mit erfüllten Aufgaben anzeigen, aber schreibgeschützt.
 
-            Log.d(TAG, "User: " + auth.getCurrentUser().getEmail());
+            // get shared preferences and check for last actions
+
+//            Log.d(TAG, "User: " + auth.getCurrentUser().getEmail());
             SharedPreferences sharedPreferences = this.getSharedPreferences("checkedItems", Context.MODE_PRIVATE);
 ////
             if (sharedPreferences != null && !sharedPreferences.getAll().isEmpty()) {

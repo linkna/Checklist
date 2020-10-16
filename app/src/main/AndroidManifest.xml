@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ShareListActivity"></activity>
+        <activity android:name=".ImportListActivity"></activity>
+        <activity android:name=".ShareListActivity" />
         <activity android:name=".LogoutActivity" />
         <activity android:name=".LastActionActivity" />
         <activity android:name=".AddListActivity" />

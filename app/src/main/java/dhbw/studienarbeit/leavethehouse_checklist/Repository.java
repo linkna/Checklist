@@ -13,13 +13,13 @@ public class Repository {
     DocumentSnapshot userDocumentSnapshot;
     Checklist selectedList;
     List<Checklist> allListsOfUser;
+    List<String> sharedLists;
 
     Map<Integer, String> checkedItems;
 
     //Singleton-Pattern
 
     private static final Repository instance = new Repository();
-
 
     public static Repository getInstance() {
         return instance;
@@ -74,5 +74,13 @@ public class Repository {
 
     public void setCheckedItems(Map<Integer, String> checkedItems) {
         this.checkedItems = checkedItems;
+    }
+
+    public void setSharedLists(List<String> sharedLists) {
+        this.sharedLists =sharedLists;
+    }
+
+    public List<String> getSharedLists() {
+        return sharedLists;
     }
 }

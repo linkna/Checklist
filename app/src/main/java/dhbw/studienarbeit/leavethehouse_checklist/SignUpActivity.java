@@ -60,8 +60,9 @@ public class SignUpActivity extends AppCompatActivity {
 
                 if (validateInput(email, password, firstname,lastname)) {
 
-                    userInput.put("firstname", inputFirstName.getText().toString());
-                    userInput.put("lastname", inputLastName.getText().toString());
+                    userInput.put("firstname", firstname);
+                    userInput.put("lastname", lastname);
+                    userInput.put("email", email.toLowerCase());
 
                     mAuth.createUserWithEmailAndPassword(email, password)
                             .addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
@@ -86,6 +87,9 @@ public class SignUpActivity extends AppCompatActivity {
                                         String uid = currentUser.getUid();
                                         //save data to database. Table: User: document generated with current users uid.
                                         mDatabase.collection("User").document(uid).set(userInput);
+                                        Map<String, Object> data = new HashMap<>();
+                                        data.put("exist", true);
+                                        mDatabase.collection("SharedLists").document(email).set(data);
                                         finish();
                                     }
                                 }

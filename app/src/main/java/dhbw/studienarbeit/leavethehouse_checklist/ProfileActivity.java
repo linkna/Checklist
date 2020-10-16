@@ -62,9 +62,7 @@ public class ProfileActivity extends BaseActivity {
         changePasswordBtn = findViewById(R.id.passwordChangeButton);
         deleteProfileBtn = findViewById(R.id.accountDeleteButton);
 
-//        changeEmailBtn.setTextColor(getColor(R.color.white));
-//        changePasswordBtn.setTextColor(getColor(R.color.white));
-//        deleteProfileBtn.setTextColor(getColor(R.color.white));
+
 
         String uid = repository.getUid();
 
@@ -96,6 +94,7 @@ public class ProfileActivity extends BaseActivity {
         EditText emailEditText = deletePopupWindow.getContentView().findViewById(R.id.emailEditText);
         EditText passwordEditText = deletePopupWindow.getContentView().findViewById(R.id.passwordEditText);
 
+        //todo change password & email setOnClickListener - change email --> db SharedLists update
 
         deleteProfileBtn.setOnClickListener(v -> {
             taskListPopup.setVisibility(View.INVISIBLE);

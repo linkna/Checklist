@@ -3,11 +3,16 @@ package dhbw.studienarbeit.leavethehouse_checklist;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -19,7 +24,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,9 +44,11 @@ public class ChecklistOverviewActivity extends BaseActivity {
 
     private static final String TAG = "ChecklistOverviewActivity";
     private TextView noListTextView;
+    private Button importBtn;
     private List<Map<String, Object>> checklistMap;
     private Checklist selectedList;
     private Repository repository;
+    private List<String> sharedLists;
 
 
     @Override
@@ -59,6 +65,7 @@ public class ChecklistOverviewActivity extends BaseActivity {
         overviewList = findViewById(R.id.overviewListView);
         noListTextView = findViewById(R.id.noListTextView);
         addListButton = findViewById(R.id.addListButton);
+        importBtn = findViewById(R.id.cancelButton);
 
         checklistTitleList = new ArrayList<>();
         checklistMap = new ArrayList<>();
@@ -71,11 +78,45 @@ public class ChecklistOverviewActivity extends BaseActivity {
 
         checklistFuture = getChecklistData(uid);
         updateList(checklistFuture);
+//        List<String> sharedLists = repository.getSharedLists();
+//        Log.d(TAG, String.valueOf(sharedLists));
 
-        if(!getSharedLists(uid).isEmpty()){
-            // neue geteilte Liste für Nutzer -> Benachrichtigung
-            Toast.makeText(ChecklistOverviewActivity.this, R.string.new_shared_list, Toast.LENGTH_SHORT).show();
-        }
+        // get shared checklist ids and write them to repository
+        mDatabase.collection("SharedLists")
+                .document(mAuth.getCurrentUser().getEmail())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                sharedLists=(List<String>) document.get("checklistID");
+                                repository.setSharedLists((List<String>) document.get("checklistID"));
+
+                                if(!sharedLists.isEmpty()) {
+                                    importBtn.setVisibility(View.VISIBLE);
+                                    importBtn.setOnClickListener(v -> {
+                                        Intent intent = new Intent(ChecklistOverviewActivity.this, ImportListActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    });
+
+                                    Toast.makeText(ChecklistOverviewActivity.this, getString(R.string.new_shared_list), Toast.LENGTH_SHORT).show();
+                                }
+                                    Log.d(TAG, "checklistID data: " + document.get("checklistID"));
+
+                            } else {
+                                Log.d(TAG, "No such document");
+                            }
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
+                        }
+                    }
+                });
+
+
+
 
         overviewList.setOnItemClickListener((parent, view, position, id) -> {
 
@@ -112,23 +153,25 @@ public class ChecklistOverviewActivity extends BaseActivity {
 
     }
 
-    private List<String> getSharedLists(String uid) {
-
-        List<String> sharedList;
-
-        Task<DocumentSnapshot> userTask = mDatabase
-                .collection("User")
-                .document(uid)
-                .get()
-                .addOnSuccessListener(documentSnapshot -> documentSnapshot.get("sharedList"));
-
-        if (userTask.isSuccessful() && userTask.getResult() != null && userTask.getResult().get("sharedList") instanceof List) {
-            sharedList = (List<String>) userTask.getResult().get("sharedList");
-        }else{
-            sharedList = Collections.emptyList();
-        }
-        return sharedList;
-    }
+//    private List<String> getSharedLists(String email) {
+//
+//        List<String> sharedList;
+//
+//        Task<DocumentSnapshot> sharedListTask = mDatabase
+//                .collection("SharedLists")
+//                .document(email)
+//                .get()
+//                .addOnSuccessListener(documentSnapshot -> {
+//                    documentSnapshot.get("checklistID");
+//                });
+//
+//        if (sharedListTask.isSuccessful() && sharedListTask.getResult() != null && sharedListTask.getResult().get("checklistID") instanceof List) {
+//            sharedList = (List<String>) sharedListTask.getResult().get("sharedList");
+//        }else{
+//            sharedList = Collections.emptyList();
+//        }
+//        return sharedList;
+//    }
 
     @SuppressWarnings("ConstantConditions")
     private void updateList(Task<List<Checklist>> checklistFuture) {
