@@ -13,12 +13,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-public class LastActionActivity extends BaseActivity {
+public class LastActionActivity extends AppCompatActivity {
 
     private Set<String> checkedTaskPositions;
     private List<String> allTasks;
@@ -36,14 +38,14 @@ public class LastActionActivity extends BaseActivity {
 
         SharedPreferences sharedPreferences = this.getSharedPreferences("checkedItems", Context.MODE_PRIVATE);
 
-//
+
         if (sharedPreferences != null) {
 
-            Log.d(TAG, "shared preference " + sharedPreferences.getAll().keySet());
+//            Log.d(TAG, "shared preference " + sharedPreferences.getAll().keySet());
             Set<String> keySet = sharedPreferences.getAll().keySet();
 
             for (String element : keySet) {
-                Log.d(TAG, "shared preference key: " + element);
+//                Log.d(TAG, "shared preference key: " + element);
                 if (element.equalsIgnoreCase("allTasksInSelectedList")) {
                     Set<String> allTasksInSelectedList = sharedPreferences.getStringSet(element, null);
                     allTasks = new ArrayList<>(Objects.requireNonNull(allTasksInSelectedList));

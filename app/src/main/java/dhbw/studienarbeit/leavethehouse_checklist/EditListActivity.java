@@ -36,9 +36,8 @@ public class EditListActivity extends BaseActivity {
 
     private ListView taskListView;
 
-    PopupWindow editTextPopupWindow;
+    private PopupWindow editTextPopupWindow, deletePopupWindow;
     private TextView inputType, editTextPopup;
-    private PopupWindow deletePopupWindow;
     private FirebaseFirestore mDatabase;
     private List<Checklist> allListsOfUser;
     private ListView taskListPopup;
@@ -190,13 +189,14 @@ public class EditListActivity extends BaseActivity {
                         .addOnSuccessListener(aVoid -> {
                             titlePopup.setText("");
                             titlePopup.setVisibility(View.INVISIBLE);
-                            deletePopupWindow.dismiss();
-                            Intent intent = new Intent(EditListActivity.this, ChecklistOverviewActivity.class);
-                            startActivity(intent);
+                            startActivity(new Intent(EditListActivity.this, ChecklistOverviewActivity.class));
+                            finish();
 
                         })
                         .addOnFailureListener(e -> {
                             titlePopup.setText("");
+                            titlePopup.setVisibility(View.INVISIBLE);
+                            deletePopupWindow.dismiss();
                             Log.d(TAG, getString(R.string.error_writing_to_db), e);
                             Toast.makeText(EditListActivity.this, getString(R.string.deletion_failed), Toast.LENGTH_SHORT).show();
                         });
@@ -262,6 +262,15 @@ public class EditListActivity extends BaseActivity {
 
 
     }
+
+    @Override
+    protected void onStop() {
+        if(deletePopupWindow.isShowing()) {
+            deletePopupWindow.dismiss();
+        }
+        super.onStop();
+    }
+
 
     public void onBackPressed() {
         Intent intent = new Intent(EditListActivity.this, TaskChecklistActivity.class);

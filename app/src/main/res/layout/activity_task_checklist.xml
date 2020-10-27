@@ -19,7 +19,8 @@
         android:textAllCaps="false"
         app:layout_constraintLeft_toLeftOf="@id/guideline1"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guideline2" />
+        app:layout_constraintTop_toBottomOf="@id/guideline2"
+        android:visibility="invisible"/>
 
     <ListView
         android:id="@+id/taskOverviewListView"

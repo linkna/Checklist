@@ -58,39 +58,7 @@ public class ShareListActivity extends AppCompatActivity {
         shareBtn.setOnClickListener(v -> {
             String input = email.getText().toString();
             if (Patterns.EMAIL_ADDRESS.matcher(input).matches()) {
-                // search for user and write list id as sharedlist to db
-                DocumentReference docRef = mDatabase.collection("SharedLists").document(input);
-                docRef.get().addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                            Map<String, Object> data = new HashMap<>();
-                            ArrayList<String> ids = new ArrayList<>();
-                            if(document.get("checklistID") != null) {
-                                ids = (ArrayList<String>) document.get("checklistID");
-                            }
-                            if(!ids.contains(selectedList.getId())) {
-                                ids.add(selectedList.getId());
-                                data.put("checklistID", ids);
-                                mDatabase.collection("SharedLists").document(input).set(data)
-                                        .addOnSuccessListener(aVoid -> {
-                                    startActivity(new Intent(ShareListActivity.this, TaskChecklistActivity.class));
-                                    finish();
-                                }).addOnFailureListener(e -> {
-                                    Toast.makeText(ShareListActivity.this, getString(R.string.error_writing_to_db), Toast.LENGTH_SHORT).show();
-                                });
-                            }else{
-                                Toast.makeText(ShareListActivity.this, getString(R.string.error_is_already_shared), Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            email.setError(getString(R.string.user_not_found));
-                        }
-                    } else {
-                        Log.d(TAG, "get failed with ", task.getException());
-                    }
-                });
-
+                writeSharedListToDB(mDatabase, selectedList, email, input);
             } else {
                 email.setError(getString(R.string.error_email_valid));
             }
@@ -102,6 +70,42 @@ public class ShareListActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void writeSharedListToDB(FirebaseFirestore mDatabase, Checklist selectedList, EditText email, String input) {
+        // search for user document in collection SharedLists and write list id to it
+        DocumentReference docRef = mDatabase.collection("SharedLists").document(input);
+        docRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+//                    Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                    Map<String, Object> data = new HashMap<>();
+                    ArrayList<String> ids = new ArrayList<>();
+                    if(document.get("checklistID") != null) {
+                        ids = (ArrayList<String>) document.get("checklistID");
+                    }
+                    if(!ids.contains(selectedList.getId())) {
+                        ids.add(selectedList.getId());
+                        data.put("checklistID", ids);
+                        mDatabase.collection("SharedLists").document(input).set(data)
+                                .addOnSuccessListener(aVoid -> {
+                            startActivity(new Intent(ShareListActivity.this, TaskChecklistActivity.class));
+                                    Toast.makeText(ShareListActivity.this, getString(R.string.successfull_shared)+ input, Toast.LENGTH_SHORT).show();
+                            finish();
+                        }).addOnFailureListener(e -> {
+                            Toast.makeText(ShareListActivity.this, getString(R.string.sharing_failed), Toast.LENGTH_SHORT).show();
+                        });
+                    }else{
+                        Toast.makeText(ShareListActivity.this, getString(R.string.error_is_already_shared), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    email.setError(getString(R.string.user_not_found));
+                }
+            } else {
+                Log.d(TAG, "get failed with ", task.getException());
+            }
+        });
     }
 
     public void onBackPressed() {

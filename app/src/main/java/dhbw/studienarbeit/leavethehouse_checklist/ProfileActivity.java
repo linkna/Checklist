@@ -1,6 +1,8 @@
 package dhbw.studienarbeit.leavethehouse_checklist;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -29,10 +31,12 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Objects;
+
 
 public class ProfileActivity extends BaseActivity {
 
-    private Button changeEmailBtn, changePasswordBtn, deleteProfileBtn;
+    private Button changePasswordBtn, deleteProfileBtn;
     private TextView firstName;
     private TextView lastName;
     private Repository repository;
@@ -53,12 +57,12 @@ public class ProfileActivity extends BaseActivity {
 
         repository = Repository.getInstance();
 
+        SharedPreferences sharedPreferences = this.getSharedPreferences("checkedItems", Context.MODE_PRIVATE);
 
         firstName = findViewById(R.id.firstNameTextView);
         lastName = findViewById(R.id.lastNameTextView);
         TextView emailTextView = findViewById(R.id.emailTextView);
 
-        changeEmailBtn = findViewById(R.id.emailChangeButton);
         changePasswordBtn = findViewById(R.id.passwordChangeButton);
         deleteProfileBtn = findViewById(R.id.accountDeleteButton);
 
@@ -94,7 +98,18 @@ public class ProfileActivity extends BaseActivity {
         EditText emailEditText = deletePopupWindow.getContentView().findViewById(R.id.emailEditText);
         EditText passwordEditText = deletePopupWindow.getContentView().findViewById(R.id.passwordEditText);
 
-        //todo change password & email setOnClickListener - change email --> db SharedLists update
+        //todo change password setOnClickListener
+        changePasswordBtn.setOnClickListener(v -> {
+            assert currentUser != null;
+            auth.sendPasswordResetEmail(Objects.requireNonNull(currentUser.getEmail()))
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(ProfileActivity.this, getString(R.string.email_sent), Toast.LENGTH_LONG).show();
+                        }else {
+                            Toast.makeText(ProfileActivity.this, getString(R.string.error_reset_password), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        });
 
         deleteProfileBtn.setOnClickListener(v -> {
             taskListPopup.setVisibility(View.INVISIBLE);
@@ -123,44 +138,49 @@ public class ProfileActivity extends BaseActivity {
                         .getCredential(email, password);
 
                 // Prompt the user to re-provide their sign-in credentials
-                currentUser.reauthenticate(credential)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    currentUser.delete()
-                                            .addOnCompleteListener(task1 -> {
-                                                if (task1.isSuccessful()) {
-                                                    Log.d(TAG, "User account deleted.");
-                                                    deletePopupWindow.dismiss();
+                    assert currentUser != null;
+                    currentUser.reauthenticate(credential)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+//                                String email1 = currentUser.getEmail();
+                                currentUser.delete()
+                                        .addOnCompleteListener(task1 -> {
+                                            if (task1.isSuccessful()) {
+                                                Log.d(TAG, "User account deleted.");
+//                                                deletePopupWindow.dismiss();
 
-                                                    // delete documents in database
-                                                    CollectionReference checklistRef = mDatabase.collection("Checklist");
-                                                    Task<QuerySnapshot> checklistDatabaseTask = checklistRef.whereEqualTo("userid", uid).get();
-                                                    checklistDatabaseTask.addOnSuccessListener(queryDocumentSnapshots ->
-                                                    {
-                                                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
-                                                            checklistRef.document(documentSnapshot.getId()).delete()
-                                                                    .addOnSuccessListener(aVoid -> Log.d(TAG, "DocumentSnapshot successfully deleted!"))
-                                                                    .addOnFailureListener(e -> Log.w(TAG, "Error deleting document", e));
-                                                        }
-                                                    });
+                                                // delete documents in database
+                                                CollectionReference checklistRef = mDatabase.collection("Checklist");
+                                                Task<QuerySnapshot> checklistDatabaseTask = checklistRef.whereEqualTo("userid", uid).get();
+                                                checklistDatabaseTask.addOnSuccessListener(queryDocumentSnapshots ->
+                                                {
+                                                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
+                                                        checklistRef.document(documentSnapshot.getId()).delete()
+                                                                .addOnSuccessListener(aVoid -> Log.d(TAG, "DocumentSnapshot successfully deleted!"))
+                                                                .addOnFailureListener(e -> Log.w(TAG, "Error deleting document", e));
+                                                    }
+                                                });
 
-                                                    CollectionReference userRef = mDatabase.collection("User");
-                                                    userRef.document(uid).delete()
-                                                            .addOnSuccessListener(aVoid -> Log.d(TAG, "DocumentSnapshot successfully deleted!"))
-                                                            .addOnFailureListener(e -> Log.w(TAG, "Error deleting document", e));
+                                                CollectionReference userRef = mDatabase.collection("User");
+                                                userRef.document(uid).delete()
+                                                        .addOnSuccessListener(aVoid -> Log.d(TAG, "DocumentSnapshot successfully deleted!"))
+                                                        .addOnFailureListener(e -> Log.w(TAG, "Error deleting document", e));
 
-                                                    startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
-                                                    finish();
-                                                } else {
-                                                    Log.d("TAG", "User account deletion unsucessful.");
-                                                    Toast.makeText(ProfileActivity.this, R.string.deletion_failed, Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                                } else {
-                                    Toast.makeText(ProfileActivity.this, R.string.auth_failed, Toast.LENGTH_SHORT).show();
-                                }
+                                                CollectionReference sharedListsRef = mDatabase.collection("SharedLists");
+                                                sharedListsRef.document(email).delete()
+                                                        .addOnSuccessListener(aVoid -> Log.d(TAG, "DocumentSnapshot successfully deleted!"))
+                                                        .addOnFailureListener(e -> Log.w(TAG, "Error deleting document", e));;
+
+                                                sharedPreferences.edit().clear().apply();
+                                                startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
+                                                finish();
+                                            } else {
+                                                Log.d("TAG", "User account deletion unsucessful.");
+                                                Toast.makeText(ProfileActivity.this, R.string.deletion_failed, Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            } else {
+                                Toast.makeText(ProfileActivity.this, R.string.auth_failed, Toast.LENGTH_SHORT).show();
                             }
                         });
             }
@@ -171,9 +191,16 @@ public class ProfileActivity extends BaseActivity {
         });
     }
 
+    @Override
+    protected void onStop() {
+        if(deletePopupWindow.isShowing()) {
+            deletePopupWindow.dismiss();
+        }
+        super.onStop();
+    }
 
     public void onBackPressed() {
-        Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+        Intent intent = new Intent(ProfileActivity.this, ChecklistOverviewActivity.class);
         startActivity(intent);
         finish();
     }

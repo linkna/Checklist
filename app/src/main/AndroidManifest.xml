@@ -20,7 +20,6 @@
         <activity android:name=".TaskChecklistActivity" />
         <activity android:name=".ChecklistOverviewActivity" />
         <activity android:name=".SignUpActivity" />
-        <activity android:name=".SuccessActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

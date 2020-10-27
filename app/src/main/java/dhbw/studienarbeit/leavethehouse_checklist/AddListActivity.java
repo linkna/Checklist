@@ -56,7 +56,10 @@ public class AddListActivity extends AppCompatActivity {
 
         addTaskBtn.setOnClickListener(v -> {
             String task = taskEditText.getText().toString();
-            if (!task.isEmpty()||task.trim().length()!=0) {
+            if (task.isEmpty()||task.trim().length()==0) {
+                taskEditText.setError(getString(R.string.error_empty_textfield));
+            }else {
+
                 if(taskList.contains(task)){
                     taskEditText.setError(getString(R.string.errorTaskExists));
                 }else {
@@ -66,8 +69,6 @@ public class AddListActivity extends AppCompatActivity {
                     myAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, taskList);
                     taskListView.setAdapter(myAdapter);
                 }
-            }else {
-                taskEditText.setError(getString(R.string.error_empty_textfield));
             }
         });
 

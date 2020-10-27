@@ -15,10 +15,6 @@ import java.util.Set;
 
 public class TaskChecklistActivity extends BaseActivity {
 
-
-    private ArrayList<String> checkedTasks;
-    private ArrayList<Integer> checkedItemPosition;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,35 +32,13 @@ public class TaskChecklistActivity extends BaseActivity {
 
         ArrayAdapter<String> mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, selectedList.getTasks());
         taskList.setAdapter(mAdapter);
-//        if (repository.getCheckedItems() != null) {
-//            repository.getCheckedItems().keySet().forEach(position -> {
-//                taskList.setItemChecked(position, true);
-//            });
-//        }
-
-//        if (sharedPreferences != null && sharedPreferences.getStringSet(selectedList.getTitle(), null) != null) {
-//
-//            Set<String> tmpSet = sharedPreferences.getStringSet(selectedList.getTitle(), null);
-//            if (tmpSet != null) {
-//                tmpSet.forEach(s -> {
-//                    Integer position = Integer.valueOf(s);
-//                    taskList.setItemChecked(position, true);
-//                    Log.d("TaskCkecklistActivity ", s + " checked position");
-//                });
-//            }
-//
-//        }
 
 
-        // Testen: speichern der ausgewählten Elemente als shared Preference für die letzte Liste
+        // save selected items as shared preference for last action
         taskList.setOnItemClickListener((parent, view, position, id) -> {
             editor.clear();
             Set<String> checkedTasks = new HashSet();
             Set<String> taskSet = new HashSet<>(selectedList.getTasks());
-//            Set<String> taskSet = new HashSet<>();
-//            selectedList.getTasks().forEach(s -> {
-//                taskSet.add(s);
-//            });
 
             //get checked items
             SparseBooleanArray checked = taskList.getCheckedItemPositions();
