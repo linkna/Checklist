@@ -139,8 +139,10 @@ public class EditListActivity extends BaseActivity {
         addTaskBtn.setOnClickListener(v -> {
             TextView taskEditText = findViewById(R.id.taskEditText);
             String task = taskEditText.getText().toString();
-            if (!task.isEmpty() || task.trim().length() != 0) {
-                if (taskList.contains(task)) {
+            if (task.isEmpty() || task.trim().length() == 0) {
+                taskEditText.setError(getString(R.string.error_empty_textfield));
+            } else {
+                if (taskList.contains(task.trim())) {
                     taskEditText.setError(getString(R.string.errorTaskExists));
                 } else {
                     taskList.add(task.trim());
@@ -160,8 +162,6 @@ public class EditListActivity extends BaseActivity {
                                 Toast.makeText(EditListActivity.this, getString(R.string.saving_failed), Toast.LENGTH_SHORT).show();
                             });
                 }
-            } else {
-                taskEditText.setError(getString(R.string.error_empty_textfield));
             }
         });
 
