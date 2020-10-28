@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -49,6 +50,7 @@ public class LastActionActivity extends AppCompatActivity {
                 if (element.equalsIgnoreCase("allTasksInSelectedList")) {
                     Set<String> allTasksInSelectedList = sharedPreferences.getStringSet(element, null);
                     allTasks = new ArrayList<>(Objects.requireNonNull(allTasksInSelectedList));
+                    Collections.sort(allTasks, String.CASE_INSENSITIVE_ORDER);
                     ArrayAdapter<String> mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, allTasks);
                     taskListView.setAdapter(mAdapter);
                 } else {

@@ -37,7 +37,7 @@
     <string name="emptyTasks">Bitte Aufgaben hinzufügen. Aufgabenliste darf nicht leer sein.</string>
     <string name="no_empty_tasks">Leere Aufgabenliste nicht zulässig. Bitte komplette Liste löschen.</string>
     <string name="last_used_list">Zuletzt verwendete Liste:</string>
-    <string name="last_action">zuletzt verwendete Checkliste</string>
+    <string name="last_action">Zuletzt verwendete Checkliste</string>
     <string name="no_used_list">Noch keine Checkliste verwendet.</string>
     <string name="deletion_failed">Fehler beim Löschen</string>
     <string name="saving_failed">Fehler beim Speichern</string>
