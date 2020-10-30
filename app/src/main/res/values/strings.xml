@@ -28,20 +28,20 @@
     <string name="accessDelete">endgültig Löschen?</string>
     <string name="delete">Löschen</string>
     <string name="newTitle">neuer Titel</string>
-    <string name="errorTitleExists">Es existiert bereits eine Liste mit dieser Bezeichnung. Andere Bezeichnung wählen.</string>
-    <string name="errorTaskExists">Es existiert bereits eine Aufgabe mit dieser Bezeichnung. Andere Bezeichnung wählen.</string>
+    <string name="error_Title_Exists">Es existiert bereits eine Liste mit dieser Bezeichnung. Andere Bezeichnung wählen.</string>
+    <string name="error_Task_Exists">Es existiert bereits eine Aufgabe mit dieser Bezeichnung. Andere Bezeichnung wählen.</string>
     <string name="error_empty_textfield">Eingabe darf nicht leer sein.</string>
     <string name="sign_up">Registrieren</string>
     <string name="add">hinzufügen</string>
     <string name="deleteList">Liste Löschen</string>
-    <string name="emptyTasks">Bitte Aufgaben hinzufügen. Aufgabenliste darf nicht leer sein.</string>
+    <string name="error_empty_Tasks">Bitte Aufgaben hinzufügen. Aufgabenliste darf nicht leer sein.</string>
     <string name="no_empty_tasks">Leere Aufgabenliste nicht zulässig. Bitte komplette Liste löschen.</string>
     <string name="last_used_list">Zuletzt verwendete Liste:</string>
     <string name="last_action">Zuletzt verwendete Checkliste</string>
     <string name="no_used_list">Noch keine Checkliste verwendet.</string>
     <string name="deletion_failed">Fehler beim Löschen</string>
     <string name="saving_failed">Fehler beim Speichern</string>
-    <string name="error_email_valid">Bitte gültiges Email-Adressen-Format eingeben</string>
+    <string name="error_email_not_valid">Bitte gültiges Email-Adressen-Format eingeben</string>
     <string name="new_shared_list">Neue freigegebene Liste. Nutze Liste importieren zum hinzufügen.</string>
     <string name="error_writing_to_db">Error writing document</string>
     <string name="shareList">Liste teilen</string>
@@ -51,7 +51,7 @@
     <string name="import_list">Liste importieren</string>
     <string name="shared_lists">Mit mir geteilte Listen:</string>
     <string name="no_document_in_db">Die geteilte Liste wurde vom Besitzer gelöscht. Liste kann nicht mehr importiert werden.</string>
-    <string name="successfull_shared">"Die Liste wurde für den Nutzer freigegeben: "</string>
+    <string name="successful_shared">"Die Liste wurde für den Nutzer freigegeben: "</string>
     <string name="delete_list">Liste löschen</string>
     <string name="successfull_deleted">Löschen erfolgreich.</string>
     <string name="sharing_failed">Die Liste konnte nicht geteilt werden. Datenbankfehler.</string>
@@ -64,5 +64,9 @@
     <string name="successfull_signed_up">Registrierung erfolgreich.</string>
     <string name="enterEmail">E-Mail Adresse eingeben</string>
     <string name="enterPassword">Passwort eingeben</string>
+    <string name="snapshot_deleted">DocumentSnapshot successfully deleted!</string>
+    <string name="error_deleting_snapshot">Error deleting document snapshot</string>
+    <string name="error_deleting_user">Error deleting user</string>
+    <string name="user_deleted">User account successfully deleted.</string>
 
 </resources>

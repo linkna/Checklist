@@ -94,29 +94,29 @@ public class SignUpActivity extends AppCompatActivity {
         boolean isInputValid = true;
 
         if (TextUtils.isEmpty(email)) {
-            inputEmail.setError("Email-Adresse eingeben");
+            inputEmail.setError(getString(R.string.enterEmail));
             isInputValid = false;
         }
 
         if (TextUtils.isEmpty(password)) {
-            inputPassword.setError("Passwort eingeben");
+            inputPassword.setError(getString(R.string.enterPassword));
             isInputValid = false;
         }
 
         if (password.length() < 6) {
-            inputPassword.setError("Password zu kurz. Mindestlänge 6 Zeichen");
+            inputPassword.setError(getString(R.string.minimum_password));
             isInputValid = false;
         }
         if (!isEmailValid(inputEmail.getText().toString())) {
-            inputEmail.setError("Bitte gültiges Email-Adressen-Format eingeben");
+            inputEmail.setError(getString(R.string.error_email_not_valid));
             isInputValid = false;
         }
         if (TextUtils.isEmpty(firstname)) {
-            inputFirstName.setError("Vorname eingeben");
+            inputFirstName.setError(getString(R.string.error_empty_textfield));
             isInputValid = false;
         }
         if (TextUtils.isEmpty(lastname)) {
-            inputLastName.setError("Nachname eingeben");
+            inputLastName.setError(getString(R.string.error_empty_textfield));
             isInputValid = false;
         }
 

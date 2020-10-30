@@ -14,9 +14,8 @@ public class LogoutActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Repository repository;
+        Repository repository = Repository.getInstance();
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        repository = Repository.getInstance();
 
         SharedPreferences sharedPreferences = this.getSharedPreferences("checkedItems", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();

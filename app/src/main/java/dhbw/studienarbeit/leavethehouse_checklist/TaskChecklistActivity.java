@@ -36,22 +36,22 @@ public class TaskChecklistActivity extends BaseActivity {
 
         // save selected items as shared preference for last action
         taskList.setOnItemClickListener((parent, view, position, id) -> {
-            editor.clear();
-            Set<String> checkedTasks = new HashSet();
-            Set<String> taskSet = new HashSet<>(selectedList.getTasks());
+        editor.clear();
+        Set<String> checkedTasks = new HashSet();
+        Set<String> taskSet = new HashSet<>(selectedList.getTasks());
 
-            //get checked items
-            SparseBooleanArray checked = taskList.getCheckedItemPositions();
-            for (int i = 0; i < checked.size(); i++)
-                if (checked.valueAt(i)) {
-                    checkedTasks.add(String.valueOf((checked.keyAt(i))));
-                }
-            editor.putStringSet("allTasksInSelectedList", taskSet);
-            editor.putStringSet(selectedList.getTitle(), checkedTasks);
+        //get checked items
+        SparseBooleanArray checked = taskList.getCheckedItemPositions();
+        for (int i = 0; i < checked.size(); i++)
+            if (checked.valueAt(i)) {
+                checkedTasks.add(String.valueOf((checked.keyAt(i))));
+            }
+        editor.putStringSet("allTasksInSelectedList", taskSet);
+        editor.putStringSet(selectedList.getTitle(), checkedTasks);
 
-            editor.apply();
-        });
-    }
+        editor.apply();
+    });
+}
 
     public void editListLabelClick(View view) {
         startActivity(new Intent(TaskChecklistActivity.this, EditListActivity.class));

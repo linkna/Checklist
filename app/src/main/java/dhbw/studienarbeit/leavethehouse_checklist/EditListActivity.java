@@ -110,9 +110,9 @@ public class EditListActivity extends BaseActivity {
                     // check if list title exists for current user - No equal titles are allowed.
                     allListsOfUser.forEach(checklist -> checklistTitleList.add(checklist.getTitle()));
                     if (checklistTitleList.stream().anyMatch(titleToMatch -> titleToMatch.equalsIgnoreCase(newTitle))) {
-                        editTextPopup.setError(getString(R.string.errorTitleExists));
+                        editTextPopup.setError(getString(R.string.error_Title_Exists));
                     } else {
-                        // write to database, if successfull change repository
+                        // write to database, if successful change repository
                         DocumentReference ref = mDatabase.collection("Checklist").document(listId);
 
                         ref.update("title", newTitle)
@@ -143,12 +143,12 @@ public class EditListActivity extends BaseActivity {
                 taskEditText.setError(getString(R.string.error_empty_textfield));
             } else {
                 if (taskList.contains(task.trim())) {
-                    taskEditText.setError(getString(R.string.errorTaskExists));
+                    taskEditText.setError(getString(R.string.error_Task_Exists));
                 } else {
                     taskList.add(task.trim());
                     Collections.sort(taskList, String.CASE_INSENSITIVE_ORDER);
                     taskEditText.setText("");
-
+                    // write to database, if successful change repository
                     DocumentReference ref = mDatabase.collection("Checklist").document(listId);
                     ref.update("tasks", taskList)
                             .addOnSuccessListener(aVoid -> {
@@ -234,7 +234,7 @@ public class EditListActivity extends BaseActivity {
                 }
 
                 DocumentReference ref = mDatabase.collection("Checklist").document(listId);
-
+                // write to database, if successful change repository
                 ref.update("tasks", taskList)
                         .addOnSuccessListener(aVoid -> {
                             selectedList.setTasks(taskList);

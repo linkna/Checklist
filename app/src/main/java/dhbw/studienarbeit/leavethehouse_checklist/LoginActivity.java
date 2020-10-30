@@ -17,7 +17,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText inputEmail, inputPassword;
-    public FirebaseAuth auth;
+    public FirebaseAuth mAuth;
     private static final String TAG = "LoginActivity";
     private Repository repository;
 
@@ -26,27 +26,21 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        auth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         repository= Repository.getInstance();
 
 
         // check if user is signed in. getCurrentUser() will be null if not signed in
-        if (auth.getCurrentUser() != null) {
-            FirebaseUser currentUser = auth.getCurrentUser();
+        if (mAuth.getCurrentUser() != null) {
+            FirebaseUser currentUser = mAuth.getCurrentUser();
             repository.setCurrentUser(currentUser);
             repository.setUid(currentUser.getUid());
-
             // get shared preferences and check for last actions
-
-//            Log.d(TAG, "User: " + auth.getCurrentUser().getEmail());
             SharedPreferences sharedPreferences = this.getSharedPreferences("checkedItems", Context.MODE_PRIVATE);
-////
             if (sharedPreferences != null && !sharedPreferences.getAll().isEmpty()) {
-
                 Intent intent = new Intent(LoginActivity.this, LastActionActivity.class);
                 startActivity(intent);
                 finish();
-
             } else {
                 Intent intent = new Intent(LoginActivity.this, ChecklistOverviewActivity.class);
                 startActivity(intent);
@@ -76,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             //authenticate user
-            auth.signInWithEmailAndPassword(email, password)
+            mAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(LoginActivity.this, task -> {
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
@@ -89,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
                             }
                         } else {
-                            FirebaseUser currentUser = auth.getCurrentUser();
+                            FirebaseUser currentUser = mAuth.getCurrentUser();
                             repository.setCurrentUser(currentUser);
                             repository.setUid(currentUser.getUid());
                             startActivity(new Intent(LoginActivity.this, ChecklistOverviewActivity.class));
@@ -110,9 +104,9 @@ public class LoginActivity extends AppCompatActivity {
         inputEmail = (EditText) findViewById(R.id.emailEditText);
         String emailAddress = inputEmail.getText().toString();
         if(emailAddress.isEmpty()){
-            inputEmail.setError(getString(R.string.error_email_valid));
+            inputEmail.setError(getString(R.string.error_email_not_valid));
         }else {
-            auth.sendPasswordResetEmail(emailAddress)
+            mAuth.sendPasswordResetEmail(emailAddress)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Toast.makeText(LoginActivity.this, getString(R.string.email_sent), Toast.LENGTH_SHORT).show();

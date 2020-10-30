@@ -18,9 +18,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
@@ -37,8 +34,8 @@ import java.util.Objects;
 public class ProfileActivity extends BaseActivity {
 
     private Button changePasswordBtn, deleteProfileBtn;
-    private TextView firstName;
-    private TextView lastName;
+    private TextView firstNameTextView;
+    private TextView lastNameTextView;
     private Repository repository;
     private PopupWindow deletePopupWindow;
     private Button cancelDeleteBtnPopup, deleteBtnPopup;
@@ -59,13 +56,12 @@ public class ProfileActivity extends BaseActivity {
 
         SharedPreferences sharedPreferences = this.getSharedPreferences("checkedItems", Context.MODE_PRIVATE);
 
-        firstName = findViewById(R.id.firstNameTextView);
-        lastName = findViewById(R.id.lastNameTextView);
+        firstNameTextView = findViewById(R.id.firstNameTextView);
+        lastNameTextView = findViewById(R.id.lastNameTextView);
         TextView emailTextView = findViewById(R.id.emailTextView);
 
         changePasswordBtn = findViewById(R.id.passwordChangeButton);
         deleteProfileBtn = findViewById(R.id.accountDeleteButton);
-
 
 
         String uid = repository.getUid();
@@ -77,8 +73,8 @@ public class ProfileActivity extends BaseActivity {
                     DocumentSnapshot documentSnapshot = task.getResult();
                     if (documentSnapshot == null) throw new AssertionError();
                     repository.setUserDocumentSnapshot(documentSnapshot);
-                    firstName.setText(documentSnapshot.getString("firstname"));
-                    lastName.setText(documentSnapshot.getString("lastname"));
+                    firstNameTextView.setText(documentSnapshot.getString("firstname"));
+                    lastNameTextView.setText(documentSnapshot.getString("lastname"));
                 }
         );
 
@@ -98,14 +94,13 @@ public class ProfileActivity extends BaseActivity {
         EditText emailEditText = deletePopupWindow.getContentView().findViewById(R.id.emailEditText);
         EditText passwordEditText = deletePopupWindow.getContentView().findViewById(R.id.passwordEditText);
 
-        //todo change password setOnClickListener
         changePasswordBtn.setOnClickListener(v -> {
             assert currentUser != null;
             auth.sendPasswordResetEmail(Objects.requireNonNull(currentUser.getEmail()))
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Toast.makeText(ProfileActivity.this, getString(R.string.email_sent), Toast.LENGTH_LONG).show();
-                        }else {
+                        } else {
                             Toast.makeText(ProfileActivity.this, getString(R.string.error_reset_password), Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -124,66 +119,64 @@ public class ProfileActivity extends BaseActivity {
                 String password = passwordEditText.getText().toString();
 
                 if (TextUtils.isEmpty(password)) {
-                    passwordEditText.setError("Passwort eingeben");
+                    passwordEditText.setError(getString(R.string.enterPassword));
                     isInputValid = false;
                 }
-                if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-                    emailEditText.setError("Bitte gültiges Email-Adressen-Format eingeben");
-                    isInputValid =false;
+                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    emailEditText.setError(getString(R.string.error_email_not_valid));
+                    isInputValid = false;
                 }
 
                 if (isInputValid) {
 
-                AuthCredential credential = EmailAuthProvider
-                        .getCredential(email, password);
+                    AuthCredential credential = EmailAuthProvider
+                            .getCredential(email, password);
 
-                // Prompt the user to re-provide their sign-in credentials
+                    // Prompt the user to re-provide their sign-in credentials
                     assert currentUser != null;
                     currentUser.reauthenticate(credential)
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-//                                String email1 = currentUser.getEmail();
-                                currentUser.delete()
-                                        .addOnCompleteListener(task1 -> {
-                                            if (task1.isSuccessful()) {
-                                                Log.d(TAG, "User account deleted.");
-//                                                deletePopupWindow.dismiss();
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    currentUser.delete()
+                                            .addOnCompleteListener(task1 -> {
+                                                if (task1.isSuccessful()) {
+                                                    Log.d(TAG, getString(R.string.user_deleted));
+                                                    // delete documents in database
+                                                    CollectionReference checklistRef = mDatabase.collection("Checklist");
+                                                    Task<QuerySnapshot> checklistDatabaseTask = checklistRef.whereEqualTo("userid", uid).get();
+                                                    checklistDatabaseTask.addOnSuccessListener(queryDocumentSnapshots ->
+                                                    {
+                                                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
+                                                            checklistRef.document(documentSnapshot.getId()).delete()
+                                                                    .addOnSuccessListener(aVoid -> Log.d(TAG, getString(R.string.snapshot_deleted)))
+                                                                    .addOnFailureListener(e -> Log.w(TAG, getString(R.string.error_deleting_snapshot), e));
+                                                        }
+                                                    });
 
-                                                // delete documents in database
-                                                CollectionReference checklistRef = mDatabase.collection("Checklist");
-                                                Task<QuerySnapshot> checklistDatabaseTask = checklistRef.whereEqualTo("userid", uid).get();
-                                                checklistDatabaseTask.addOnSuccessListener(queryDocumentSnapshots ->
-                                                {
-                                                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
-                                                        checklistRef.document(documentSnapshot.getId()).delete()
-                                                                .addOnSuccessListener(aVoid -> Log.d(TAG, "DocumentSnapshot successfully deleted!"))
-                                                                .addOnFailureListener(e -> Log.w(TAG, "Error deleting document", e));
-                                                    }
-                                                });
+                                                    CollectionReference userRef = mDatabase.collection("User");
+                                                    userRef.document(uid).delete()
+                                                            .addOnSuccessListener(aVoid -> Log.d(TAG, getString(R.string.snapshot_deleted)))
+                                                            .addOnFailureListener(e -> Log.w(TAG, getString(R.string.error_deleting_snapshot), e));
 
-                                                CollectionReference userRef = mDatabase.collection("User");
-                                                userRef.document(uid).delete()
-                                                        .addOnSuccessListener(aVoid -> Log.d(TAG, "DocumentSnapshot successfully deleted!"))
-                                                        .addOnFailureListener(e -> Log.w(TAG, "Error deleting document", e));
+                                                    CollectionReference sharedListsRef = mDatabase.collection("SharedLists");
+                                                    sharedListsRef.document(email).delete()
+                                                            .addOnSuccessListener(aVoid -> Log.d(TAG, getString(R.string.snapshot_deleted)))
+                                                            .addOnFailureListener(e -> Log.w(TAG, getString(R.string.error_deleting_snapshot), e));
+                                                    ;
 
-                                                CollectionReference sharedListsRef = mDatabase.collection("SharedLists");
-                                                sharedListsRef.document(email).delete()
-                                                        .addOnSuccessListener(aVoid -> Log.d(TAG, "DocumentSnapshot successfully deleted!"))
-                                                        .addOnFailureListener(e -> Log.w(TAG, "Error deleting document", e));;
-
-                                                sharedPreferences.edit().clear().apply();
-                                                startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
-                                                finish();
-                                            } else {
-                                                Log.d("TAG", "User account deletion unsucessful.");
-                                                Toast.makeText(ProfileActivity.this, R.string.deletion_failed, Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                            } else {
-                                Toast.makeText(ProfileActivity.this, R.string.auth_failed, Toast.LENGTH_SHORT).show();
-                            }
-                        });
-            }
+                                                    sharedPreferences.edit().clear().apply();
+                                                    startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
+                                                    finish();
+                                                } else {
+                                                    Log.d("TAG", getString(R.string.error_deleting_user));
+                                                    Toast.makeText(ProfileActivity.this, R.string.deletion_failed, Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                } else {
+                                    Toast.makeText(ProfileActivity.this, R.string.auth_failed, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                }
             });
             cancelDeleteBtnPopup.setOnClickListener(v1 -> {
                 deletePopupWindow.dismiss();
@@ -193,7 +186,7 @@ public class ProfileActivity extends BaseActivity {
 
     @Override
     protected void onStop() {
-        if(deletePopupWindow.isShowing()) {
+        if (deletePopupWindow.isShowing()) {
             deletePopupWindow.dismiss();
         }
         super.onStop();

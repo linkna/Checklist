@@ -1,6 +1,5 @@
 package dhbw.studienarbeit.leavethehouse_checklist;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -14,19 +13,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ShareListActivity extends AppCompatActivity {
@@ -45,7 +37,7 @@ public class ShareListActivity extends AppCompatActivity {
 
         TextView title = findViewById(R.id.titleToShareTextView);
         ListView taskList = findViewById(R.id.taskOverviewListView);
-        EditText email = findViewById(R.id.emailEditText);
+        EditText emailEditText = findViewById(R.id.emailEditText);
         Button cancelBtn = findViewById(R.id.cancelButton);
         Button shareBtn = findViewById(R.id.shareListButton);
 
@@ -56,11 +48,11 @@ public class ShareListActivity extends AppCompatActivity {
 
 
         shareBtn.setOnClickListener(v -> {
-            String input = email.getText().toString();
+            String input = emailEditText.getText().toString();
             if (Patterns.EMAIL_ADDRESS.matcher(input).matches()) {
-                writeSharedListToDB(mDatabase, selectedList, email, input);
+                writeSharedListToDB(mDatabase, selectedList, emailEditText, input);
             } else {
-                email.setError(getString(R.string.error_email_valid));
+                emailEditText.setError(getString(R.string.error_email_not_valid));
             }
         });
 
@@ -91,7 +83,7 @@ public class ShareListActivity extends AppCompatActivity {
                         mDatabase.collection("SharedLists").document(input).set(data)
                                 .addOnSuccessListener(aVoid -> {
                             startActivity(new Intent(ShareListActivity.this, TaskChecklistActivity.class));
-                                    Toast.makeText(ShareListActivity.this, getString(R.string.successfull_shared)+ input, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ShareListActivity.this, getString(R.string.successful_shared)+ input, Toast.LENGTH_SHORT).show();
                             finish();
                         }).addOnFailureListener(e -> {
                             Toast.makeText(ShareListActivity.this, getString(R.string.sharing_failed), Toast.LENGTH_SHORT).show();

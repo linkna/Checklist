@@ -41,12 +41,8 @@ public class LastActionActivity extends AppCompatActivity {
 
 
         if (sharedPreferences != null) {
-
-//            Log.d(TAG, "shared preference " + sharedPreferences.getAll().keySet());
             Set<String> keySet = sharedPreferences.getAll().keySet();
-
             for (String element : keySet) {
-//                Log.d(TAG, "shared preference key: " + element);
                 if (element.equalsIgnoreCase("allTasksInSelectedList")) {
                     Set<String> allTasksInSelectedList = sharedPreferences.getStringSet(element, null);
                     allTasks = new ArrayList<>(Objects.requireNonNull(allTasksInSelectedList));
@@ -54,33 +50,23 @@ public class LastActionActivity extends AppCompatActivity {
                     ArrayAdapter<String> mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, allTasks);
                     taskListView.setAdapter(mAdapter);
                 } else {
-
                     titleTextView.setText(element);
                     checkedTaskPositions = sharedPreferences.getStringSet(element, null);
                     if (checkedTaskPositions == null) throw new AssertionError();
-
                         taskListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, allTasks) {
                             @Override
                             public View getView(int pos, View convertView, ViewGroup parent) {
-
                                 View row = super.getView(pos, convertView, parent);
-
-
                                 if (checkedTaskPositions.contains(String.valueOf(pos))) {                                    // do something change color
                                     row.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                                 }
                                 else{
-                                    // default state
                                     row.setBackgroundColor(getResources().getColor(R.color.red));
                                 }
                                 return row;
                             }
                         });
-
-//                    }
-
-                    }
-//                }
+                }
             }
         }
 

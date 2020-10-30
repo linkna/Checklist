@@ -60,7 +60,7 @@ public class AddListActivity extends AppCompatActivity {
                 taskEditText.setError(getString(R.string.error_empty_textfield));
             }else {
                 if(taskList.contains(task.trim())){
-                    taskEditText.setError(getString(R.string.errorTaskExists));
+                    taskEditText.setError(getString(R.string.error_Task_Exists));
                 }else {
                     taskList.add(task.trim());
                     Collections.sort(taskList, String.CASE_INSENSITIVE_ORDER);
@@ -81,10 +81,10 @@ public class AddListActivity extends AppCompatActivity {
                 // check if list title exists for current user - No equal titles are allowed.
                 allListsOfUser.forEach(checklist -> checklistTitleList.add(checklist.getTitle()));
                 if (checklistTitleList.stream().anyMatch(titleToMatch -> titleToMatch.equalsIgnoreCase(newTitle))) {
-                    titleEditText.setError(getString(R.string.errorTitleExists));
+                    titleEditText.setError(getString(R.string.error_Title_Exists));
                 } else {
                     if (taskList.size() == 0) {
-                        Toast.makeText(AddListActivity.this, R.string.emptyTasks, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddListActivity.this, R.string.error_empty_Tasks, Toast.LENGTH_SHORT).show();
                     } else {
                         newChecklist.put("tasks", taskList);
                         newChecklist.put("title", newTitle);
@@ -94,17 +94,11 @@ public class AddListActivity extends AppCompatActivity {
                         mDatabase.collection("Checklist")
                                 .add(newChecklist)
                                 .addOnSuccessListener(documentReference -> {
-                                    Log.d("xxxx", "DocumentSnapshot written with ID: " + documentReference.getId());
                                     Intent intent = new Intent(AddListActivity.this, ChecklistOverviewActivity.class);
                                     startActivity(intent);
                                     finish();
                                 })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.w("AddList", "Error writing document", e);
-                                    }
-                                });
+                                .addOnFailureListener(e -> Log.w("AddList", "Error writing document", e));
                     }
                 }
             }
