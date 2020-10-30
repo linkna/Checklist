@@ -63,8 +63,6 @@ public class ImportListActivity extends AppCompatActivity {
         @SuppressLint("InflateParams") View importPopupView = inflater.inflate(R.layout.import_popup_window, null);
 
         // create the popup window
-//        int width = (int)(getResources().getDisplayMetrics().widthPixels*0.8);
-//        int height = (int)(getResources().getDisplayMetrics().heightPixels*0.8);
         int width = LinearLayout.LayoutParams.MATCH_PARENT;
         int height = LinearLayout.LayoutParams.MATCH_PARENT;
         importListPopupWindow = new PopupWindow(importPopupView, width, height, true);

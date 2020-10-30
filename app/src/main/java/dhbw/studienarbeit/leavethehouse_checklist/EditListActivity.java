@@ -81,8 +81,6 @@ public class EditListActivity extends BaseActivity {
         View editTextPopupView = inflater.inflate(R.layout.edittext_popup_window, null);
 
         // create the popup window
-//        int width = (int)(getResources().getDisplayMetrics().widthPixels*0.8);
-//        int height = (int)(getResources().getDisplayMetrics().heightPixels*0.8);
         int width = LinearLayout.LayoutParams.MATCH_PARENT;
         int height = LinearLayout.LayoutParams.MATCH_PARENT;
         editTextPopupWindow = new PopupWindow(editTextPopupView, width, height, true);
@@ -228,7 +226,6 @@ public class EditListActivity extends BaseActivity {
             taskListPopup.setAdapter(myAdapter);
 
             deleteBtnPopup.setOnClickListener(v1 -> {
-//                    if (tasksToDelete.size() != taskList.size()) {
                 for (String task : tasksToDelete) {
                     taskList.remove(task);
                 }

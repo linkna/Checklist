@@ -56,7 +56,6 @@ public class ChecklistOverviewActivity extends BaseActivity {
 
 
         mDatabase = FirebaseFirestore.getInstance();
-//        mAuth = FirebaseAuth.getInstance();
 
         repository = Repository.getInstance();
 
@@ -109,8 +108,6 @@ public class ChecklistOverviewActivity extends BaseActivity {
                 });
 
 
-
-
         overviewList.setOnItemClickListener((parent, view, position, id) -> {
 
             String clickedTitle = checklistTitleList.get(position);
@@ -125,11 +122,6 @@ public class ChecklistOverviewActivity extends BaseActivity {
                             .build();
 
                     repository.setSelectedList(selectedList);
-
-
-//                    Log.d(TAG, String.valueOf(map.get("title")));
-//                    Log.d(TAG, selectedList.getTitle());
-
                 }
             }
 

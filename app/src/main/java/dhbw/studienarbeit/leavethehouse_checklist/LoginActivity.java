@@ -95,7 +95,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void signUpLabelClick(View view) {
-//        setContentView(R.layout.activity_sign_up);
         startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
         finish();
     }
