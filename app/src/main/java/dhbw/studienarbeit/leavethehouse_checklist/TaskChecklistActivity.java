@@ -12,8 +12,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -25,7 +23,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class TaskChecklistActivity extends BaseActivity {
     private static final String TAG = "TaskChecklistActivity" ;
@@ -59,15 +56,9 @@ public class TaskChecklistActivity extends BaseActivity {
         taskList.setOnItemClickListener((parent, view, position, id) -> {
         editor.clear();
         Set<String> checkedTasks = getCheckedTasksPositions(taskList);
-//        Set<String> checkedTasks = new HashSet();
+
         Set<String> taskSet = new HashSet<>(selectedList.getTasks());
-//
-//        //get checked items positions
-//        SparseBooleanArray checked = taskList.getCheckedItemPositions();
-//        for (int i = 0; i < checked.size(); i++)
-//            if (checked.valueAt(i)) {
-//                checkedTasks.add(String.valueOf((checked.keyAt(i))));
-//            }
+
         editor.putStringSet("allTasksInSelectedList", taskSet);
         editor.putStringSet(selectedList.getTitle(), checkedTasks);
 
@@ -86,46 +77,41 @@ public class TaskChecklistActivity extends BaseActivity {
 
             DocumentReference ref = mDatabase.collection("Checklist").document(selectedList.getId());
 
-            ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete( Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            ArrayList history = new ArrayList();
-                            if(document.get("history")!=null) {
-                                history = (ArrayList<Object>) document.get("history");
-                            }
-                            List<String> checkedList = new ArrayList<>();
-                            checkedTasks.forEach(position -> {
-                                checkedList.add(selectedList.getTasks().get(Integer.parseInt(position)));
-                            });
-
-                            HashMap<String, Object> newEntry = new HashMap<>();
-                            newEntry.put("date", Date);
-                            newEntry.put("checkedTasks", checkedList);
-
-                                history.add(newEntry);
-
-
-                            ref.update("history", history)
-                                    .addOnSuccessListener(aVoid -> {
-                                        Log.d(TAG, "erfolgreich!");
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        Log.d(TAG, getString(R.string.error_writing_to_db), e);
-                                        Toast.makeText(TaskChecklistActivity.this, getString(R.string.saving_failed), Toast.LENGTH_SHORT).show();
-                                    });
-                        } else {
-                            Log.d(TAG, "No such document");
+            ref.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        ArrayList history = new ArrayList();
+                        if(document.get("history")!=null) {
+                            history = (ArrayList<Object>) document.get("history");
                         }
+                        List<String> checkedList = new ArrayList<>();
+                        checkedTasks.forEach(position -> {
+                            checkedList.add(selectedList.getTasks().get(Integer.parseInt(position)));
+                        });
+
+                        HashMap<String, Object> newEntry = new HashMap<>();
+                        newEntry.put("date", Date);
+                        newEntry.put("checkedTasks", checkedList);
+
+                            history.add(newEntry);
+
+
+                        ref.update("history", history)
+                                .addOnSuccessListener(aVoid -> {
+                                    Toast.makeText(TaskChecklistActivity.this, getString(R.string.saved_to_history)+" "+Date +": "+ checkedTasks.size()+"/"+taskSet.size()+" "+getString(R.string.approved), Toast.LENGTH_SHORT).show();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Log.d(TAG, getString(R.string.error_writing_to_db), e);
+                                    Toast.makeText(TaskChecklistActivity.this, getString(R.string.saving_failed), Toast.LENGTH_SHORT).show();
+                                });
                     } else {
-                        Log.d(TAG, "get failed with ", task.getException());
+                        Log.d(TAG, "No such document");
                     }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
                 }
             });
-
-            Toast.makeText(TaskChecklistActivity.this, getString(R.string.saved_to_history)+" "+Date +": "+ checkedTasks.size()+"/"+taskSet.size()+" "+getString(R.string.approved), Toast.LENGTH_SHORT).show();
             startActivity(new Intent(TaskChecklistActivity.this, ChecklistOverviewActivity.class));
             finish();
         });
