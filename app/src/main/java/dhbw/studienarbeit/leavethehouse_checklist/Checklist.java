@@ -1,6 +1,7 @@
 package dhbw.studienarbeit.leavethehouse_checklist;
 
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,6 +21,7 @@ class Checklist {
         this.userid = userid;
         this.tasks = tasks;
     }
+
 
     public static class ChecklistBuilder{
         private String id;

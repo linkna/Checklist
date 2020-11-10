@@ -68,5 +68,11 @@
     <string name="error_deleting_snapshot">Error deleting document snapshot</string>
     <string name="error_deleting_user">Error deleting user</string>
     <string name="user_deleted">User account successfully deleted.</string>
+    <string name="ready">fertig</string>
+    <string name="history">Historie</string>
+    <string name="error_reading_db">Fehler bei Datenbankzugriff</string>
+    <string name="approved">bestätigt.</string>
+    <string name="missingTasks">Fehlende Aufgaben:</string>
+    <string name="saved_to_history">In der Historie gespeichert.</string>
 
 </resources>

@@ -62,7 +62,7 @@ public class ChecklistOverviewActivity extends BaseActivity {
         overviewList = findViewById(R.id.overviewListView);
         noListTextView = findViewById(R.id.noListTextView);
         addListButton = findViewById(R.id.addListButton);
-        importBtn = findViewById(R.id.cancelButton);
+        importBtn = findViewById(R.id.importButton);
 
         checklistTitleList = new ArrayList<>();
         checklistMap = new ArrayList<>();
